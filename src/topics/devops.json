@@ -1,0 +1,174 @@
+{
+  "id": "devops",
+  "label": "DevOps",
+  "icon": "⚙️",
+  "vol": "VOL 03",
+  "hero": {
+    "kicker": "★ MARGIN NOTES · VOL 03",
+    "title": "What is <span class=\"swap\">DevOps</span>,<br/>really?",
+    "subtitle": "(beyond the buzzword.)",
+    "lead": "A scribbled-in field guide to DevOps — what it is, what it isn't, and the handful of ideas you actually need to be useful on day one.",
+    "pills": [
+      { "label": "~8 MIN READ", "color": "yellow" },
+      { "label": "2 LESSONS", "color": "mint" },
+      { "label": "1 LEVEL", "color": "pink" }
+    ],
+    "note": "← drag the thumb tabs on the right →"
+  },
+  "welcomeStickies": [
+    {
+      "color": "yellow",
+      "tilt": "tilt2",
+      "tape": true,
+      "html": "✎ Warning:<br/><br/>\"DevOps\" is one of those words companies print on job postings and nobody fully agrees on. We're going for the practical core."
+    },
+    {
+      "color": "pink",
+      "tilt": "tilt3",
+      "tape": true,
+      "html": "✎ A promise:<br/><br/>no \"transform your culture\" slides. Pipelines, environments, observability — the parts you actually wire up."
+    }
+  ],
+  "tocTitle": "What's in this volume",
+  "levels": [
+    {
+      "id": "basic",
+      "label": "BASIC",
+      "topics": "CI/CD · Observability",
+      "intro": "— the two ideas that turn 'pile of code' into 'a thing in production'.",
+      "lessons": [
+        {
+          "id": 1,
+          "tag": "LESSON 01 · BASIC",
+          "number": "01",
+          "screenLabel": "L1 CI/CD",
+          "title": "CI/CD is a <span class=\"marker-underline\">conveyor belt</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "right",
+              "sticky": {
+                "color": "yellow",
+                "tape": true,
+                "html": "Imagine a factory. You drop your changes at one end. At the other end, a finished, tested, deployed thing rolls out — every single time, the same way."
+              },
+              "html": "<p>That's CI/CD. <span class=\"highlight\">Continuous Integration tests every change. Continuous Delivery (or Deployment) ships it.</span> The point isn't the tools — it's that the steps between \"I wrote it\" and \"it's live\" are <i>automatic and repeatable</i>.</p><p class=\"joke\">The traditional alternative: <span class=\"joke-spicy\">one senior engineer with a runbook in a Google Doc that hasn't been updated since 2019.</span></p>",
+              "placeholder": "metaphor: assembly line — code commit on the left, deployed app on the right"
+            },
+            {
+              "type": "diagram",
+              "label": "THE PIPELINE",
+              "layout": "flex-row",
+              "gap": 32,
+              "justify": "center",
+              "items": [
+                { "kind": "node", "color": "yellow", "label": "Commit", "caption": "git push" },
+                { "kind": "arrow", "from": [5, 30], "to": [80, 30], "curve": -15, "width": 90, "height": 60 },
+                { "kind": "node", "color": "pink", "label": "Build", "caption": "compile / bundle" },
+                { "kind": "arrow", "from": [5, 30], "to": [80, 30], "curve": -15, "width": 90, "height": 60 },
+                { "kind": "node", "color": "mint", "label": "Test", "caption": "unit + integration" },
+                { "kind": "arrow", "from": [5, 30], "to": [80, 30], "curve": -15, "width": 90, "height": 60 },
+                { "kind": "node", "color": "sky", "label": "Deploy", "caption": "to staging or prod" }
+              ],
+              "caption": "if any step fails, the belt stops. nobody pretends the change is fine."
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "WITHOUT CI/CD",
+                "html": "<p class=\"hand\" style=\"font-size:20px;margin:0\">\"Friday afternoon deploy.\"</p><p style=\"margin-top:10px;color:var(--muted)\">Someone SSHes in. Pulls. Restarts. Hopes. Pages out 30 minutes later.</p>"
+              },
+              "good": {
+                "label": "WITH CI/CD",
+                "html": "<p class=\"hand\" style=\"font-size:20px;margin:0\">\"It's in main? It's in prod.\"</p><p style=\"margin-top:10px;color:var(--muted)\">Merging triggers the pipeline. Tests gate the deploy. Rollback is one click.</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — what a real pipeline does",
+              "html": "<p>A typical pipeline: lint → unit tests → build artifact → push to a registry → deploy to staging → run integration tests against staging → (optional manual approval) → deploy to prod → smoke-test prod → notify a channel.</p><p>The exact tool — <span class=\"circle-it\">GitHub Actions, GitLab CI, CircleCI, Jenkins</span> — barely matters. What matters is that the same steps run the same way every time, and the green checkmark means something.</p>"
+            },
+            {
+              "type": "reflection",
+              "id": "devops-l1-reflect",
+              "prompt": "Last time something broke in production — could a pipeline step have caught it before it shipped?"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "tag": "LESSON 02 · BASIC",
+          "number": "02",
+          "screenLabel": "L2 Observability",
+          "title": "Observability is a <span class=\"marker-underline blue\">window, not a smoke alarm</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "left",
+              "sticky": {
+                "color": "mint",
+                "tilt": "right",
+                "html": "Monitoring is a smoke alarm: it screams when the kitchen is already on fire. Observability is a glass wall: you can see what's cooking, all the time, before anything starts smelling."
+              },
+              "html": "<p>Observability is the broader idea. <span class=\"highlight\">Logs, metrics, and traces — together — so you can ask new questions about a running system.</span> Monitoring is what you set up <i>after</i> you know what to watch. Observability is what saves you when something breaks in a way nobody predicted.</p><p class=\"joke\">If your only debugging tool in production is <code>SSH</code> and <code>grep</code>, <span class=\"joke-spicy\">welcome to the 1990s. Stay a while.</span></p>",
+              "placeholder": "metaphor: dashboard wall — graphs, logs, traces — engineer watching calmly with a coffee"
+            },
+            {
+              "type": "diagram",
+              "label": "THE THREE PILLARS",
+              "layout": "flex-row",
+              "items": [
+                { "kind": "node", "color": "sky", "label": "Logs", "caption": "what happened, when" },
+                { "kind": "node", "color": "mint", "label": "Metrics", "caption": "how much, how often" },
+                { "kind": "node", "color": "pink", "label": "Traces", "caption": "where time was spent" }
+              ],
+              "caption": "different shapes of the same question: 'what is this system actually doing right now?'"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "What's the difference between a metric and a log line?",
+                  "answer": "A metric is a number you can graph: requests/sec, latency p99, error rate. A log line is a piece of text describing one event. Metrics scale cheaply. Logs are rich. You need both."
+                },
+                {
+                  "question": "When is a trace more useful than a log?",
+                  "answer": "When a single request crosses many services. A trace shows you the whole journey — every hop, every span, where the 800ms went. Logs from each service alone can't reassemble that."
+                }
+              ]
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — SLOs and 'good enough'",
+              "html": "<p>You can't watch everything. Define a few <b>SLOs</b> (Service Level Objectives) — e.g. \"99.5% of API requests under 300ms\" — and watch those religiously. Everything else is interesting, but not paging-someone-at-3am important.</p><p>The honest secret: <span class=\"circle-it\">most outages are caught by the one alert tied to user-visible impact</span>. Everything else is noise. Tune ruthlessly.</p>"
+            },
+            {
+              "type": "reflection",
+              "id": "devops-l2-reflect",
+              "prompt": "If your service died right now, what's the first place you'd look — and is that the fastest place to look?"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "outro": {
+    "title": "That's the DevOps field guide.",
+    "subtitle": "Now go automate the boring parts.",
+    "stickies": [
+      {
+        "color": "lilac",
+        "tilt": "tilt2",
+        "tape": true,
+        "html": "✎ next volume idea:<br/>\"containers, kubernetes, and the difference between 'cloud-native' and 'wrote a Dockerfile.'\""
+      },
+      {
+        "color": "sky",
+        "tilt": "tilt3",
+        "tape": true,
+        "html": "✎ remember:<br/>good DevOps is mostly <i>reducing the number of things a human has to remember</i>."
+      }
+    ],
+    "stamp": "VOL.<br/>03<br/>DONE"
+  }
+}

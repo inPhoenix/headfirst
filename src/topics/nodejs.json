@@ -1,0 +1,228 @@
+{
+  "id": "nodejs",
+  "label": "Node.js",
+  "icon": "🟩",
+  "vol": "VOL 02",
+  "hero": {
+    "kicker": "★ MARGIN NOTES · VOL 02",
+    "title": "What is <span class=\"swap\">Node.js</span>,<br/>really?",
+    "subtitle": "(and friends.)",
+    "lead": "A scribbled-in field guide to Node.js — the runtime, the event loop, npm, and why JavaScript escaped the browser in the first place.",
+    "pills": [
+      { "label": "~10 MIN READ", "color": "yellow" },
+      { "label": "3 LESSONS", "color": "mint" },
+      { "label": "2 LEVELS", "color": "pink" }
+    ],
+    "note": "← drag the thumb tabs on the right →"
+  },
+  "welcomeStickies": [
+    {
+      "color": "yellow",
+      "tilt": "tilt2",
+      "tape": true,
+      "html": "✎ Before you start:<br/><br/>you don't need to know browser JS. you need to know how to read a callback without screaming."
+    },
+    {
+      "color": "mint",
+      "tilt": "tilt3",
+      "tape": true,
+      "html": "✎ A promise:<br/><br/>no \"build a Twitter clone in 4 hours.\" we'll do the boring parts first — they're the ones you'll actually need."
+    }
+  ],
+  "tocTitle": "What's inside",
+  "levels": [
+    {
+      "id": "basic",
+      "label": "BASIC",
+      "topics": "Runtime · Event Loop",
+      "intro": "— the parts that make Node Node.",
+      "lessons": [
+        {
+          "id": 1,
+          "tag": "LESSON 01 · BASIC",
+          "number": "01",
+          "screenLabel": "L1 What is Node",
+          "title": "Node is just <span class=\"marker-underline\">JavaScript with superpowers</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "right",
+              "sticky": {
+                "color": "yellow",
+                "tape": true,
+                "html": "Imagine your browser's JavaScript engine quit its day job, moved out of the tab, and got hired as a server. Same brain. Brand new toolbelt — files, sockets, processes."
+              },
+              "html": "<p>Node.js is <span class=\"highlight\">V8 (Chrome's JS engine) plus a runtime that lets it touch your machine</span>. The browser sandboxes JS away from the filesystem and the network. Node takes those walls down on purpose.</p><p class=\"joke\">If your only mental model of JavaScript was \"the thing that makes buttons wiggle on a webpage,\" <span class=\"joke-spicy\">prepare for a small existential moment.</span></p>",
+              "placeholder": "metaphor: V8 engine in a small green box labeled 'node', wires running to files, sockets, OS"
+            },
+            {
+              "type": "diagram",
+              "label": "WHAT NODE BUNDLES TOGETHER",
+              "layout": "flex-row",
+              "items": [
+                { "kind": "node", "color": "sky", "label": "V8", "caption": "the JS engine" },
+                { "kind": "arrow", "label": "+" },
+                { "kind": "node", "color": "mint", "label": "libuv", "caption": "async I/O" },
+                { "kind": "arrow", "label": "+" },
+                { "kind": "node", "color": "pink", "label": "stdlib", "caption": "fs, net, http…" }
+              ],
+              "caption": "= Node.js. The same JS you already know, plus the things browsers refuse to give it."
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "COMMON MISCONCEPTION",
+                "html": "<p>\"Node is a different language, like Python or Go.\"</p>"
+              },
+              "good": {
+                "label": "MORE ACCURATE",
+                "html": "<p>\"Node is the same JavaScript, run outside the browser, with a different standard library bolted on.\"</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — V8 and libuv",
+              "html": "<p><b>V8</b> turns JavaScript source into fast machine code on the fly. <b>libuv</b> is the C library that gives Node its event loop and async I/O — it's what lets one process serve thousands of slow network connections without one thread per request.</p><p>Together: you write JavaScript that <i>looks</i> single-threaded, but the actual work (reading a file, talking to a socket) is happening in the background on a thread pool. The event loop is the receptionist that hands the results back to your code.</p>"
+            },
+            {
+              "type": "reflection",
+              "id": "node-l1-reflect",
+              "prompt": "Before reading this — what did you think Node was for? Did your answer change?"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "tag": "LESSON 02 · BASIC",
+          "number": "02",
+          "screenLabel": "L2 Event Loop",
+          "title": "The event loop is a <span class=\"marker-underline blue\">very polite waiter</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "left",
+              "sticky": {
+                "color": "mint",
+                "tilt": "right",
+                "html": "One waiter, full restaurant. They never stand still. They take an order, fire it to the kitchen, take the next order, drop off the appetizers from table 3, take another order. Nothing waits. Nobody is forgotten."
+              },
+              "html": "<p>That's the event loop. <span class=\"highlight\">A single thread that hands slow work to the OS and keeps moving.</span> It's why a Node server can hold thousands of connections at once.</p><p class=\"joke\">The catch: if <i>you</i> do the slow work — a CPU-heavy loop, a giant JSON.parse — the waiter freezes. <span class=\"joke-spicy\">Every other table waits while you finish your math.</span></p>",
+              "placeholder": "metaphor: one waiter zigzagging between tables, plates flying, kitchen door swinging"
+            },
+            {
+              "type": "diagram",
+              "label": "THE LOOP, ROUGHLY",
+              "layout": "flex-row",
+              "gap": 32,
+              "justify": "center",
+              "items": [
+                { "kind": "node", "color": "yellow", "label": "Take task", "caption": "from the queue" },
+                { "kind": "arrow", "from": [5, 30], "to": [80, 30], "curve": -15, "width": 90, "height": 60 },
+                { "kind": "node", "color": "pink", "label": "Run JS", "caption": "your callback" },
+                { "kind": "arrow", "from": [5, 30], "to": [80, 30], "curve": -15, "width": 90, "height": 60 },
+                { "kind": "node", "color": "mint", "label": "Wait", "caption": "for I/O to finish" },
+                { "kind": "arrow", "from": [5, 30], "to": [120, 30], "curve": 40, "width": 130, "height": 60, "color": "red", "label": "next tick" }
+              ]
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "Why does <code>while(true){}</code> freeze a Node server?",
+                  "answer": "Because the event loop is one thread. A tight synchronous loop never yields control, so no other callback — incoming request, timer, I/O completion — ever runs."
+                },
+                {
+                  "question": "What's the difference between <code>setImmediate</code> and <code>setTimeout(fn, 0)</code>?",
+                  "answer": "<code>setImmediate</code> runs after the current poll phase. <code>setTimeout(fn, 0)</code> goes into the timers phase. In practice, in real code their order depends on context — but inside an I/O callback, <code>setImmediate</code> always wins."
+                }
+              ]
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — phases of the loop",
+              "html": "<p>The event loop runs in <span class=\"circle-it\">phases</span>: timers, pending callbacks, idle/prepare, poll, check, close. Each phase has its own queue. Microtasks (promises, <code>queueMicrotask</code>) run <i>between</i> phases — which is why <code>Promise.resolve().then(…)</code> usually fires before a <code>setImmediate</code> queued in the same tick.</p><p>If you only remember one thing: <b>don't block the loop</b>. Hand long work to a worker thread, a child process, or split it into chunks.</p>"
+            },
+            {
+              "type": "reflection",
+              "id": "node-l2-reflect",
+              "prompt": "Have you ever written code that 'froze' Node? What was the slow thing?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "intermediate",
+      "label": "INTERMEDIATE",
+      "topics": "npm · Ecosystem",
+      "intro": "— the things you'll spend most of your day with.",
+      "lessons": [
+        {
+          "id": 3,
+          "tag": "LESSON 03 · INTERMEDIATE",
+          "number": "03",
+          "screenLabel": "L3 npm",
+          "title": "npm is a <span class=\"marker-underline green\">shared cupboard</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "right",
+              "sticky": {
+                "color": "pink",
+                "tilt": "right",
+                "html": "Imagine a giant kitchen where every cook in the world dropped a jar of something they made. Some jars are gold. Some are mystery sauce from 2014. Most are fine."
+              },
+              "html": "<p>That's npm. <span class=\"highlight\">A registry of JavaScript packages — millions of them.</span> You name a thing, someone wrote a package for it. Probably three packages. The trick isn't installing — it's choosing.</p><p class=\"joke\">The number-one Node-developer skill, in honesty: <span class=\"joke-spicy\">reading a package's last-commit date and weekly download count before you <code>npm install</code> anything.</span></p>",
+              "placeholder": "metaphor: huge wall of jars and packages, some glowing, some dusty, all labeled in JSON"
+            },
+            {
+              "type": "diagram",
+              "label": "ANATOMY OF A PACKAGE.JSON",
+              "html": "<div style=\"display:flex;flex-direction:column;gap:14px\"><div style=\"display:flex;align-items:center;gap:14px\"><span class=\"hand\" style=\"font-size:22px;color:var(--marker-red);min-width:120px\">name →</span><code class=\"mono\" style=\"background:#fff;padding:6px 12px;border:1.5px solid var(--ink);border-radius:4px\">\"my-thing\"</code></div><div style=\"display:flex;align-items:center;gap:14px\"><span class=\"hand\" style=\"font-size:22px;color:var(--marker-red);min-width:120px\">scripts →</span><span class=\"hand\" style=\"font-size:22px\">\"start\", \"test\", \"build\" — the tasks you can run with <code>npm run</code></span></div><div style=\"display:flex;align-items:center;gap:14px\"><span class=\"hand\" style=\"font-size:22px;color:var(--marker-red);min-width:120px\">dependencies →</span><span class=\"hand\" style=\"font-size:22px\">the jars you actually use at runtime</span></div><div style=\"display:flex;align-items:center;gap:14px\"><span class=\"hand\" style=\"font-size:22px;color:var(--marker-red);min-width:120px\">devDeps →</span><span class=\"hand\" style=\"font-size:22px\">the jars you only need while building or testing</span></div></div>"
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "RISKY",
+                "html": "<code class=\"mono\" style=\"font-size:12px\">npm i some-random-package-with-30-downloads</code><p style=\"margin-top:8px;color:var(--muted)\">No source. No tests. One maintainer with a vague username.</p>"
+              },
+              "good": {
+                "label": "SAFER",
+                "html": "<code class=\"mono\" style=\"font-size:12px\">npm i a-well-known-package</code><p style=\"margin-top:8px;color:var(--muted)\">Check: weekly downloads, last commit, open issues, source on GitHub.</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — node_modules, lockfiles, and semver",
+              "html": "<p><b>node_modules</b> is where installed packages live. It can get enormous because every dep brings its own deps. <b>package-lock.json</b> pins exact versions so two developers (or your laptop and CI) get the same tree.</p><p>Versions follow <span class=\"circle-it\">semver</span>: <code>MAJOR.MINOR.PATCH</code>. A <code>^1.2.3</code> in package.json means \"any 1.x ≥ 1.2.3\". A <code>~1.2.3</code> means \"any 1.2.x ≥ 1.2.3\". A bare <code>1.2.3</code> means exactly that.</p>"
+            },
+            {
+              "type": "reflection",
+              "id": "node-l3-reflect",
+              "prompt": "What's the worst dependency you've inherited? What made it bad — abandoned, oversized, or just wrong fit?"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "outro": {
+    "title": "That's the Node field guide.",
+    "subtitle": "Now go ship something with it.",
+    "stickies": [
+      {
+        "color": "lilac",
+        "tilt": "tilt2",
+        "tape": true,
+        "html": "✎ next volume idea:<br/>\"streams, buffers, and the parts of Node nobody teaches first.\""
+      },
+      {
+        "color": "sky",
+        "tilt": "tilt3",
+        "tape": true,
+        "html": "✎ remember:<br/>most production Node bugs are just <i>the loop being blocked</i> in a way you didn't notice."
+      }
+    ],
+    "stamp": "VOL.<br/>02<br/>DONE"
+  }
+}

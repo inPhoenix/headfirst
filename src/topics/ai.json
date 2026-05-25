@@ -1,0 +1,431 @@
+{
+  "id": "ai",
+  "label": "AI",
+  "icon": "🤖",
+  "vol": "VOL 01",
+  "hero": {
+    "kicker": "★ MARGIN NOTES · VOL 01",
+    "title": "What is <span class=\"swap\">AI</span>,<br/>really?",
+    "subtitle": "(and friends.)",
+    "lead": "A scribbled-in field guide to AI, agents, chatbots, skills, cron, and agentic UI — explained the way a friend would, not the way a textbook would.",
+    "pills": [
+      { "label": "~20 MIN READ", "color": "yellow" },
+      { "label": "6 LESSONS", "color": "mint" },
+      { "label": "3 LEVELS", "color": "pink" }
+    ],
+    "note": "← drag the thumb tabs on the right →"
+  },
+  "welcomeStickies": [
+    {
+      "color": "yellow",
+      "tilt": "tilt2",
+      "tape": true,
+      "html": "✎ How to read this:<br/><br/>scroll. scribble in the reflection boxes (they save). flip the cards. open the \"under the hood\" if you're curious. skip anything boring."
+    },
+    {
+      "color": "pink",
+      "tilt": "tilt3",
+      "tape": true,
+      "html": "✎ A promise:<br/><br/>no equations. no ten-syllable words. no \"synergy.\" if a sentence here feels like a textbook, please send it back — i'll rewrite it."
+    },
+    {
+      "color": "mint",
+      "tilt": "",
+      "tape": true,
+      "html": "✎ Your job:<br/><br/>argue with the text. write rude things in the margins. that's literally how this works."
+    }
+  ],
+  "tocTitle": "The table of contents (also a sticky)",
+  "levels": [
+    {
+      "id": "basic",
+      "label": "BASIC",
+      "topics": "AI · Chatbots",
+      "intro": "— the parts you'll meet first. start here, even if you've heard the words before.",
+      "lessons": [
+        {
+          "id": 1,
+          "tag": "LESSON 01 · BASIC",
+          "number": "01",
+          "screenLabel": "L1 What is AI",
+          "title": "So, what <span class=\"marker-underline\">actually</span> is AI?",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "right",
+              "sticky": {
+                "color": "yellow",
+                "tape": true,
+                "html": "Imagine a parrot that has read every book ever written. It can't fly, it can't make coffee — but ask it anything, and it'll squawk back something that sounds <i>weirdly</i> smart."
+              },
+              "html": "<p>That's most of what we call \"AI\" today. <span class=\"highlight\">Pattern-matching at a planetary scale.</span> It's not thinking the way you think. It's predicting what word, pixel, or action probably comes next, based on a mountain of examples.</p><p class=\"joke\" style=\"color: var(--ink-soft)\"><i>Important:</i> the parrot is sometimes confidently wrong. We have a word for that <span class=\"joke-spicy\">— two words actually — \"hallucination\" if you're in research, \"vibes\" if you're on Twitter.</span></p>",
+              "placeholder": "metaphor: parrot in a library, reading every book at once"
+            },
+            {
+              "type": "diagram",
+              "label": "THE THREE LAYERS PEOPLE CALL 'AI'",
+              "layout": "flex-row",
+              "items": [
+                { "kind": "node", "color": "sky", "label": "AI", "caption": "the whole umbrella" },
+                { "kind": "arrow", "from": [0, 30], "to": [100, 30], "curve": 10, "width": 100, "height": 60, "label": "contains" },
+                { "kind": "node", "color": "mint", "label": "Machine Learning", "caption": "learn from data" },
+                { "kind": "arrow", "from": [0, 30], "to": [100, 30], "curve": 10, "width": 100, "height": 60, "label": "contains" },
+                { "kind": "node", "color": "pink", "label": "LLMs", "caption": "the chatty ones" }
+              ],
+              "caption": "← bigger,&nbsp;&nbsp;more&nbsp;general &nbsp;&nbsp;|&nbsp;&nbsp; narrower,&nbsp;&nbsp;more&nbsp;specific →"
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — why does it work at all?",
+              "html": "<p>A modern AI model is a giant function. You feed in text (or images, or audio), it produces numbers, and those numbers vote on the next token. Train it on enough examples and the votes start to look like understanding. Spoiler: it isn't, but the demo is impressive.</p><p>The model has <span class=\"circle-it\">billions of parameters</span> — little dials that got nudged during training. Nobody tuned them by hand. That's the magic <i>and</i> the problem.</p>"
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "COMMON MISCONCEPTION",
+                "html": "<p>\"AI is a robot brain that thinks and reasons like a human, just faster.\"</p>"
+              },
+              "good": {
+                "label": "MORE ACCURATE",
+                "html": "<p>\"AI is statistics with a really good vocabulary. It predicts likely outputs from patterns in past data.\"</p>"
+              }
+            },
+            {
+              "type": "reflection",
+              "id": "l1-reflect",
+              "prompt": "In your own words: if AI is 'pattern matching,' where would that fail?",
+              "hint": "e.g. brand new situations, math, anything requiring lived experience…"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "tag": "LESSON 02 · BASIC",
+          "number": "02",
+          "screenLabel": "L2 Chatbot",
+          "title": "A chatbot is a <span class=\"marker-underline blue\">walkie-talkie</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "left",
+              "sticky": {
+                "color": "mint",
+                "tilt": "right",
+                "html": "Press the button. Say a thing. Let go. Wait. A voice replies. Press the button. Say another thing. Repeat until you're bored."
+              },
+              "html": "<p>That's a chatbot. <span class=\"highlight\">One turn in, one turn out.</span> You talk, it talks. It doesn't go off and do anything in the world between turns — it just waits with the receiver pressed to its ear.</p><p class=\"joke\">If the chatbot tries to <i>order pizza for you</i>, congratulations — that's not a chatbot anymore. That's the next lesson.</p>",
+              "placeholder": "metaphor: two walkie-talkies on a desk, one labeled YOU, one labeled BOT"
+            },
+            {
+              "type": "diagram",
+              "label": "HOW A CHAT TURN ACTUALLY WORKS",
+              "layout": "grid",
+              "gridTemplateColumns": "auto 1fr auto 1fr auto",
+              "items": [
+                { "kind": "node", "color": "yellow", "label": "You" },
+                { "kind": "arrow", "from": [10, 30], "to": [150, 30], "curve": -12, "width": 160, "height": 60, "label": "prompt" },
+                { "kind": "node", "label": "Model" },
+                { "kind": "arrow", "from": [10, 30], "to": [150, 30], "curve": 12, "width": 160, "height": 60, "color": "blue", "label": "reply" },
+                { "kind": "node", "color": "yellow", "label": "You" }
+              ],
+              "caption": "notice: nothing happens between turns. no memory unless you give it some."
+            },
+            {
+              "type": "mockui",
+              "url": "chat.example.com",
+              "height": 240,
+              "annotations": [
+                { "x": -180, "y": 70, "text": "↗ your message" },
+                { "x": "100%", "y": 150, "text": "↖ the model's reply", "style": { "marginLeft": 10, "maxWidth": 160 } },
+                { "x": 200, "y": 230, "text": "↑ no buttons, no tools, just words", "style": { "color": "var(--marker-blue)" } }
+              ],
+              "html": "<div style=\"display:flex;flex-direction:column;gap:10px\"><div style=\"align-self:flex-end;max-width:70%;background:var(--sticky-yellow);padding:10px 14px;border-radius:16px 16px 4px 16px;font-family:Nunito\">Write me a haiku about Mondays.</div><div style=\"align-self:flex-start;max-width:70%;background:#f0eee5;padding:10px 14px;border-radius:16px 16px 16px 4px;font-family:Nunito\">Sure! Alarm clock screams<br/>Coffee's not strong enough yet —<br/>Mug judges my soul.</div></div>"
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — context, tokens, and 'memory'",
+              "html": "<p>A chatbot has no real memory. Every turn, the app re-sends the whole conversation back to the model. That's why <span class=\"circle-it\">long chats feel slower</span> — it's literally re-reading everything.</p><p>Words get chopped into \"tokens\" first (roughly: chunks of ~4 characters). The model has a maximum number of tokens it can hold in working memory at once. Exceed it, and the earliest stuff falls off the back of the truck.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "If a chatbot forgets your name after 50 messages, what most likely happened?",
+                  "answer": "The earliest messages — including the one where you introduced yourself — got pushed out of the model's context window. The app didn't 'remember' to keep that part."
+                },
+                {
+                  "question": "Why does the same chatbot give different answers to the same question?",
+                  "answer": "The model samples from a probability distribution. There's a 'temperature' setting that controls randomness. Set it to 0 and answers become much more repeatable — and often more boring."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "l2-reflect",
+              "prompt": "Think of a chatbot you've used. What's one thing it couldn't do, that you wished it could?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "intermediate",
+      "label": "INTERMEDIATE",
+      "topics": "Agents · Skills · Cron",
+      "intro": "— now we wire things together. agents, skills, schedules.",
+      "lessons": [
+        {
+          "id": 3,
+          "tag": "LESSON 03 · INTERMEDIATE",
+          "number": "03",
+          "screenLabel": "L3 Agent",
+          "title": "An agent is a <span class=\"marker-underline\">chef in a kitchen</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "right",
+              "sticky": {
+                "color": "pink",
+                "tilt": "right",
+                "html": "You say \"make me dinner.\" The chef checks the fridge, decides on pasta, boils water, chops garlic, plates it, brings it out. You didn't say <i>any</i> of those steps. The chef figured them out."
+              },
+              "html": "<p>That's an agent. A chatbot talks. An agent <span class=\"highlight\">decides what to do, then does it.</span> It picks tools, takes actions, checks the result, and tries again if it failed.</p><p class=\"joke\">The polite version: \"autonomous task execution.\"<span class=\"joke-spicy\"> The honest version: \"a model in a while-loop that occasionally surprises you.\"</span></p>",
+              "placeholder": "metaphor: chef hat above a pot, with tools (knife, timer, spoon) flying in"
+            },
+            {
+              "type": "diagram",
+              "label": "THE AGENT LOOP",
+              "layout": "flex-row",
+              "gap": 32,
+              "justify": "center",
+              "items": [
+                { "kind": "node", "color": "yellow", "label": "Think", "caption": "what should I do?" },
+                { "kind": "arrow", "from": [5, 30], "to": [80, 30], "curve": -15, "width": 90, "height": 60 },
+                { "kind": "node", "color": "pink", "label": "Act", "caption": "use a tool" },
+                { "kind": "arrow", "from": [5, 30], "to": [80, 30], "curve": -15, "width": 90, "height": 60 },
+                { "kind": "node", "color": "mint", "label": "Observe", "caption": "what happened?" },
+                { "kind": "arrow", "from": [5, 30], "to": [120, 30], "curve": 40, "width": 130, "height": 60, "color": "red", "label": "loop until done" }
+              ]
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "CHATBOT",
+                "html": "<p class=\"hand\" style=\"font-size: 22px; margin: 0\">\"How do I deploy this app?\"</p><p style=\"margin-top: 8px\">→ Returns a 12-step list. You do the steps.</p>"
+              },
+              "good": {
+                "label": "AGENT",
+                "html": "<p class=\"hand\" style=\"font-size: 22px; margin: 0\">\"Deploy this app.\"</p><p style=\"margin-top: 8px\">→ Reads your repo, picks a host, runs the CLI, fixes the error it hit, tells you the URL.</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — tools, planning, and the loop",
+              "html": "<p>An agent is usually built around a model that's been told: <i>\"Here is a list of tools you can call. To use one, output a structured request. I'll run it and give you the result.\"</i></p><p>The loop is roughly: <span class=\"mono\">model → tool call → result → model → tool call → … → final answer</span>. Each step, the model sees everything that came before. Get the prompt right, and it acts smart. Get it wrong, and it goes shopping for gardening tools when you asked for dinner.</p>"
+            },
+            {
+              "type": "reflection",
+              "id": "l3-reflect",
+              "prompt": "Name a task you'd trust to an agent, and one you absolutely wouldn't. What's the difference?"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "tag": "LESSON 04 · INTERMEDIATE",
+          "number": "04",
+          "screenLabel": "L4 Skills",
+          "title": "Skills are the agent's <span class=\"marker-underline green\">tool belt</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "left",
+              "sticky": {
+                "color": "sky",
+                "tilt": "right",
+                "html": "A plumber doesn't carry every tool ever made. They carry a wrench, a snake, some tape, a flashlight. The right belt for the job."
+              },
+              "html": "<p>Skills are the same idea, for agents. <span class=\"highlight\">A skill is a named ability + instructions for when to use it.</span> \"Send an email.\" \"Search the codebase.\" \"Save a PDF.\" The agent reaches into the belt, grabs the right one, and uses it.</p>",
+              "placeholder": "metaphor: a leather tool belt with labeled pouches — 'send email', 'read pdf', 'book flight'"
+            },
+            {
+              "type": "diagram",
+              "label": "ANATOMY OF A SKILL",
+              "html": "<div style=\"display:flex;flex-direction:column;gap:14px\"><div style=\"display:flex;align-items:center;gap:14px\"><span class=\"hand\" style=\"font-size:22px;color:var(--marker-red);min-width:80px\">NAME →</span><code class=\"mono\" style=\"background:#fff;padding:6px 12px;border:1.5px solid var(--ink);border-radius:4px\">save_as_pdf</code></div><div style=\"display:flex;align-items:center;gap:14px\"><span class=\"hand\" style=\"font-size:22px;color:var(--marker-red);min-width:80px\">WHEN →</span><span class=\"hand\" style=\"font-size:22px\">\"use this when the user wants a printable document\"</span></div><div style=\"display:flex;align-items:center;gap:14px\"><span class=\"hand\" style=\"font-size:22px;color:var(--marker-red);min-width:80px\">HOW →</span><span class=\"hand\" style=\"font-size:22px\">a script, an API call, or instructions to follow step by step</span></div></div>"
+            },
+            {
+              "type": "mockui",
+              "url": "agent.example.com/skills",
+              "height": 220,
+              "annotations": [
+                { "x": -160, "y": 50, "text": "↗ the skill list, like apps on a phone" },
+                { "x": "100%", "y": 130, "text": "↖ each one has a 'when to use it' hint", "style": { "marginLeft": 12 } }
+              ],
+              "html": "<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:10px\"><div style=\"padding:12px;border:1.5px solid var(--rule);border-radius:6px;background:#fff\"><div class=\"mono\" style=\"font-size:12px;font-weight:700\">send_email</div><div style=\"font-size:12px;color:var(--muted);margin-top:4px\">drafts + sends mail</div></div><div style=\"padding:12px;border:1.5px solid var(--rule);border-radius:6px;background:#fff\"><div class=\"mono\" style=\"font-size:12px;font-weight:700\">search_web</div><div style=\"font-size:12px;color:var(--muted);margin-top:4px\">looks up fresh info</div></div><div style=\"padding:12px;border:1.5px solid var(--rule);border-radius:6px;background:#fff\"><div class=\"mono\" style=\"font-size:12px;font-weight:700\">read_pdf</div><div style=\"font-size:12px;color:var(--muted);margin-top:4px\">extracts text from PDFs</div></div><div style=\"padding:12px;border:1.5px solid var(--rule);border-radius:6px;background:#fff\"><div class=\"mono\" style=\"font-size:12px;font-weight:700\">book_flight</div><div style=\"font-size:12px;color:var(--muted);margin-top:4px\">queries travel APIs</div></div><div style=\"padding:12px;border:1.5px solid var(--rule);border-radius:6px;background:#fff\"><div class=\"mono\" style=\"font-size:12px;font-weight:700\">make_slide</div><div style=\"font-size:12px;color:var(--muted);margin-top:4px\">builds a presentation</div></div><div style=\"padding:12px;border:1.5px solid var(--rule);border-radius:6px;background:var(--paper-deep)\"><div class=\"mono\" style=\"font-size:12px;font-weight:700\">+ add skill</div></div></div>"
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — the 'when' matters more than the 'how'",
+              "html": "<p>Most people focus on writing the code for a skill. The harder part is the description — the <span class=\"circle-it\">tiny hint</span> that tells the agent <i>when</i> to reach for it.</p><p>Bad hint → the agent ignores the skill, or uses it on every single turn like a kid with a new hammer. Good hint → it picks the right tool for the right job. Skill-writing is half engineering, half tour-guide essay.</p>"
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "BAD SKILL HINT",
+                "html": "<code class=\"mono\" style=\"font-size:12px\">\"sends emails\"</code>"
+              },
+              "good": {
+                "label": "GOOD SKILL HINT",
+                "html": "<code class=\"mono\" style=\"font-size:12px\">\"Use when the user explicitly asks to send, reply to, or schedule an email. Do NOT use for drafting where they only want to read it back.\"</code>"
+              }
+            },
+            {
+              "type": "reflection",
+              "id": "l4-reflect",
+              "prompt": "Pick a job you do often. What 3 skills would your personal agent need?"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "tag": "LESSON 05 · INTERMEDIATE",
+          "number": "05",
+          "screenLabel": "L5 Cron",
+          "title": "Cron is an <span class=\"marker-underline blue\">alarm clock for software</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "right",
+              "sticky": {
+                "color": "lilac",
+                "html": "\"Every weekday at 7am, brew the coffee.\" You don't tell the machine each morning. You set it up <i>once</i> and it goes off forever."
+              },
+              "html": "<p>That's cron. <span class=\"highlight\">A scheduler that wakes up at specific times and runs a task.</span> It's been around since the 1970s. It's not glamorous. Half the internet runs on it anyway.</p><p class=\"joke joke-spicy\">If \"Why isn't my report there?\" leads to \"the cron didn't fire\", you have officially become an adult in software.</p>",
+              "placeholder": "metaphor: classic alarm clock with bells, ringing — labeled '0 7 * * 1-5'"
+            },
+            {
+              "type": "diagram",
+              "label": "ANATOMY OF A CRON EXPRESSION",
+              "html": "<pre class=\"mono\" style=\"font-size:22px;font-weight:700;margin:0;text-align:center\">0  7  *  *  1-5</pre><div style=\"display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:18px;text-align:center\"><div><div class=\"mono\" style=\"font-weight:700;font-size:18px;color:var(--marker-red)\">↑</div><div class=\"hand\" style=\"font-size:20px\">minute</div></div><div><div class=\"mono\" style=\"font-weight:700;font-size:18px;color:var(--marker-red)\">↑</div><div class=\"hand\" style=\"font-size:20px\">hour</div></div><div><div class=\"mono\" style=\"font-weight:700;font-size:18px;color:var(--marker-red)\">↑</div><div class=\"hand\" style=\"font-size:20px\">day of month</div></div><div><div class=\"mono\" style=\"font-weight:700;font-size:18px;color:var(--marker-red)\">↑</div><div class=\"hand\" style=\"font-size:20px\">month</div></div><div><div class=\"mono\" style=\"font-weight:700;font-size:18px;color:var(--marker-red)\">↑</div><div class=\"hand\" style=\"font-size:20px\">day of week</div></div></div><p class=\"hand\" style=\"font-size:22px;margin-top:18px;margin-bottom:0;text-align:center\">translation: \"at minute 0 of hour 7, every day, every month, Monday through Friday.\"</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "What does <code>*/15 * * * *</code> mean?",
+                  "answer": "Every 15 minutes, every hour, every day. The <code>*/N</code> syntax says 'fire every N units of this field.'"
+                },
+                {
+                  "question": "What does <code>0 0 1 * *</code> mean?",
+                  "answer": "At midnight on the first of every month. Useful for monthly reports, billing rollups, and resetting that 'days since incident' counter."
+                }
+              ]
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — why agents love cron",
+              "html": "<p>A chatbot only acts when you message it. An agent only acts when you give it a task. Cron flips that around: <i>time itself</i> becomes the trigger. Every morning at 7, your agent wakes up, checks your calendar, drafts your daily standup, and emails it before you've poured the coffee.</p><p>Cron + agent + skills = software that <span class=\"circle-it\">does things while you sleep</span>. Magical and slightly unsettling. As all good tools should be.</p>"
+            },
+            {
+              "type": "reflection",
+              "id": "l5-reflect",
+              "prompt": "What's one recurring chore in your week that you wish a cron-triggered agent would handle?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advanced",
+      "label": "ADVANCED",
+      "topics": "Agentic UI",
+      "intro": "— what happens when the interface itself starts doing the work.",
+      "lessons": [
+        {
+          "id": 6,
+          "tag": "LESSON 06 · ADVANCED",
+          "number": "06",
+          "screenLabel": "L6 Agentic UI",
+          "title": "Agentic UI: the <span class=\"marker-underline\">dashboard drives itself</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "left",
+              "sticky": {
+                "color": "yellow",
+                "tilt": "right",
+                "html": "Old apps: you press the buttons. <br/>New apps: you say what you want; the app presses its own buttons and shows you what changed."
+              },
+              "html": "<p>That's agentic UI. <span class=\"highlight\">An interface where the user expresses intent, and the system takes actions on their behalf — visibly.</span> The screen stops being a control panel and becomes a windshield.</p>",
+              "placeholder": "metaphor: a car dashboard, but the steering wheel is doing its own thing while the driver watches"
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "TRADITIONAL UI",
+                "html": "<p class=\"hand\" style=\"font-size:20px;margin:0\">\"Click Reports → Filter → Last 30 days → Export → CSV → Download.\"</p><p style=\"margin-top:10px;color:var(--muted)\">5 clicks, 1 menu memorized.</p>"
+              },
+              "good": {
+                "label": "AGENTIC UI",
+                "html": "<p class=\"hand\" style=\"font-size:20px;margin:0\">\"Get me last month's sales as a CSV.\"</p><p style=\"margin-top:10px;color:var(--muted)\">The UI animates through the same 5 steps so you can see what it did. Click \"stop\" or \"undo\" if you want.</p>"
+              }
+            },
+            {
+              "type": "mockui",
+              "url": "acme.app/dashboard",
+              "height": 300,
+              "annotations": [
+                { "x": -180, "y": 60, "text": "↗ user types intent, not instructions" },
+                { "x": "100%", "y": 110, "text": "↖ the UI narrates what it's doing, step by step", "style": { "marginLeft": 14, "color": "var(--marker-blue)" } },
+                { "x": "100%", "y": 220, "text": "↖ user can interrupt or redirect", "style": { "marginLeft": 14, "color": "var(--marker-green)" } }
+              ],
+              "html": "<div style=\"display:flex;flex-direction:column;gap:12px\"><div style=\"padding:10px;background:var(--sticky-yellow);border-radius:8px;font-family:Nunito;font-size:14px\"><b>You:</b> Find the customers we lost last quarter and draft a win-back email.</div><div style=\"padding:10px;background:#f0eee5;border-radius:8px;font-family:Nunito;font-size:13px;color:var(--ink-soft)\"><span class=\"mono\" style=\"font-size:11px;color:var(--marker-blue)\">↳ searching churn report…</span><br/><span class=\"mono\" style=\"font-size:11px;color:var(--marker-blue)\">↳ found 47 accounts</span><br/><span class=\"mono\" style=\"font-size:11px;color:var(--marker-blue)\">↳ drafting email template…</span></div><div style=\"display:flex;gap:8px\"><button style=\"padding:6px 14px;border:1.5px solid var(--ink);background:#fff;border-radius:6px;font-family:Caveat;font-size:18px;cursor:pointer\">review draft</button><button style=\"padding:6px 14px;border:1.5px solid var(--marker-red);background:#fff;color:var(--marker-red);border-radius:6px;font-family:Caveat;font-size:18px;cursor:pointer\">stop</button><button style=\"padding:6px 14px;border:1.5px solid var(--ink);background:#fff;border-radius:6px;font-family:Caveat;font-size:18px;cursor:pointer\">adjust</button></div></div>"
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — what makes a UI 'agentic' (and not annoying)",
+              "html": "<p>Three things matter. <b>Transparency:</b> the user sees what the system is doing, not just the result. <b>Steerability:</b> they can interrupt, redirect, or undo at any point. <b>Locality:</b> actions happen in the place the user is already looking, not in some separate \"AI tab.\"</p><p>Get those wrong and you've built a magic box that occasionally drops a turd on the user's lap. Get them right and the app starts to feel like it's <i>collaborating</i> with you.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "A 'Submit' button vs. an AI 'do this' input — which is agentic?",
+                  "answer": "Trick question — neither, automatically. What makes a UI agentic isn't the input style, it's whether the system chooses and executes actions on the user's behalf, with visibility."
+                },
+                {
+                  "question": "What's the biggest failure mode of agentic UI?",
+                  "answer": "The system silently doing something the user didn't intend — and the user not noticing until it's too late. The cure is loud, visible, reversible steps."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "l6-reflect",
+              "prompt": "Take an app you use daily. What's one task that would be much better as an agentic flow — and what should still stay a manual button?"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "outro": {
+    "title": "That's the field guide.",
+    "subtitle": "Now go build something weird with it.",
+    "stickies": [
+      {
+        "color": "lilac",
+        "tilt": "tilt2",
+        "tape": true,
+        "html": "✎ next volume idea:<br/>\"how to actually build one of these things, with code\""
+      },
+      {
+        "color": "sky",
+        "tilt": "tilt3",
+        "tape": true,
+        "html": "✎ remember:<br/>the goal isn't to memorize. the goal is to <i>recognize</i> these patterns when you see them in the wild."
+      }
+    ],
+    "stamp": "VOL.<br/>01<br/>DONE"
+  }
+}
