@@ -4,7 +4,7 @@
 
 `PAPER: warm` · `STICKIES: holding` · `MARGINS: still legible`
 
-<a href="./KnowledgeBase.md"><strong>OPEN THE FIELD GUIDE →</strong></a>
+<a href="https://inphoenix.github.io/headfirst/"><strong>ENTER THE NOTEBOOK →</strong></a>
 
 </div>
 
@@ -30,7 +30,7 @@
 </td>
 <td width="57%" valign="top">
 
-<a href="./KnowledgeBase.md">
+<a href="https://inphoenix.github.io/headfirst/">
   <img src="https://placehold.co/640x420/f3ecd8/1d1812?text=margin+notes+%2F%2F+vol+01" alt="Margin Notes interface preview" />
 </a>
 
@@ -67,19 +67,22 @@ FLIPCARD     → question on the front, kindness on the back
 
 <div align="center">
 
-### `CLICK SEQUENCE // KNOWLEDGE FIRST, INDEX LATER`
+### `CLICK SEQUENCE // PREVIEW FIRST, INDEX LATER`
 
+<a href="https://inphoenix.github.io/headfirst/">
+  <img src="https://img.shields.io/badge/open-the_notebook-f5b461?style=for-the-badge&labelColor=1d1812&color=f5b461" alt="Open the Notebook" />
+</a>
 <a href="./KnowledgeBase.md">
-  <img src="https://img.shields.io/badge/open-the_knowledge_base-f5b461?style=for-the-badge&labelColor=1d1812&color=f5b461" alt="Open the Knowledge Base" />
+  <img src="https://img.shields.io/badge/read-knowledge_base-ffe066?style=for-the-badge&labelColor=1d1812&color=ffe066" alt="Read Knowledge Base" />
 </a>
 <a href="./src/topics/ai.json">
-  <img src="https://img.shields.io/badge/read-vol_01_AI-b4e1ce?style=for-the-badge&labelColor=1d1812&color=b4e1ce" alt="Read Vol 01 AI" />
+  <img src="https://img.shields.io/badge/vol_01-AI-b4e1ce?style=for-the-badge&labelColor=1d1812&color=b4e1ce" alt="Vol 01 AI" />
 </a>
 <a href="./src/topics/nodejs.json">
-  <img src="https://img.shields.io/badge/read-vol_02_node.js-aac8e5?style=for-the-badge&labelColor=1d1812&color=aac8e5" alt="Read Vol 02 Node.js" />
+  <img src="https://img.shields.io/badge/vol_02-node.js-aac8e5?style=for-the-badge&labelColor=1d1812&color=aac8e5" alt="Vol 02 Node.js" />
 </a>
 <a href="./src/topics/devops.json">
-  <img src="https://img.shields.io/badge/read-vol_03_devops-f7b7c2?style=for-the-badge&labelColor=1d1812&color=f7b7c2" alt="Read Vol 03 DevOps" />
+  <img src="https://img.shields.io/badge/vol_03-devops-f7b7c2?style=for-the-badge&labelColor=1d1812&color=f7b7c2" alt="Vol 03 DevOps" />
 </a>
 
 </div>
@@ -183,6 +186,8 @@ npm start
 
 When the local notebook wakes, the browser shows the refinery at
 [http://localhost:3000](http://localhost:3000).
+The hosted edition lives at
+[https://inphoenix.github.io/headfirst/](https://inphoenix.github.io/headfirst/).
 The sidebar lists the topics. The thumb tabs on the right edge are the level
 navigation. The reflections save themselves as you type.
 
@@ -250,10 +255,12 @@ The page is a notebook the reader is allowed to write in.
 
 ### `09 // final coordinate`
 
-The notebook is not the manual.
-The notebook is the first page.
+The preview is not documentation.
+The preview is the first room.
 
-<a href="./KnowledgeBase.md"><strong>./KnowledgeBase.md</strong></a>
+<a href="https://inphoenix.github.io/headfirst/"><strong>https://inphoenix.github.io/headfirst/</strong></a>
+<br />
+<a href="./KnowledgeBase.md"><code>./KnowledgeBase.md</code></a> · the schema
 <br />
 <a href="./src/topics/"><code>./src/topics/</code></a> · the volumes
 
