@@ -171,7 +171,8 @@ Filed at [src/topics/devops.json](./src/topics/devops.json).
 
 Or hand `KnowledgeBase.md` to an AI and say:
 *"Read this. Generate a topic JSON for **Rust**."*
-The AI returns a file ready to drop in. The prompt template is in §7 of the KB.
+The AI returns a file ready to drop in. The prompt template is in §8 of the KB,
+preceded by §4 — the ten Head First techniques the schema is built around.
 
 </details>
 
