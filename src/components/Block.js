@@ -2,14 +2,24 @@ import React from "react";
 import RichText from "./RichText";
 import Sticky from "./Sticky";
 import Placeholder from "./Placeholder";
+import Polaroid from "./Polaroid";
 import Diagram from "./Diagram";
 import Node from "./Node";
 import Arrow from "./Arrow";
+import AnimatedArrow from "./AnimatedArrow";
 import Collapsible from "./Collapsible";
 import ContrastPair from "./ContrastPair";
 import Reflection from "./Reflection";
 import FlipCard from "./FlipCard";
 import MockUI from "./MockUI";
+import Phone from "./Phone";
+import Terminal from "./Terminal";
+import FoldCard from "./FoldCard";
+import PullQuote from "./PullQuote";
+import BigStamp from "./BigStamp";
+import Checklist from "./Checklist";
+import MarginDoodle from "./MarginDoodle";
+import DragMatch from "./DragMatch";
 
 /* ---------- Diagram body item dispatch ---------- */
 function DiagramItem({ item }) {
@@ -30,6 +40,20 @@ function DiagramItem({ item }) {
     case "arrow":
       return (
         <Arrow
+          from={item.from || [0, 30]}
+          to={item.to || [100, 30]}
+          curve={item.curve ?? 10}
+          width={item.width ?? 100}
+          height={item.height ?? 60}
+          color={item.color || "black"}
+          label={item.label}
+          dashed={item.dashed}
+        />
+      );
+    case "animated-arrow":
+    case "animatedArrow":
+      return (
+        <AnimatedArrow
           from={item.from || [0, 30]}
           to={item.to || [100, 30]}
           curve={item.curve ?? 10}
@@ -97,7 +121,7 @@ function DiagramBody({ block }) {
   );
 }
 
-/* ---------- Metaphor (two-col: sticky+text vs picture) ---------- */
+/* ---------- Metaphor (two-col: sticky+text vs picture/polaroid) ---------- */
 function MetaphorBlock({ block }) {
   const textCol = (
     <div>
@@ -112,9 +136,31 @@ function MetaphorBlock({ block }) {
       {block.html && <RichText style={{ marginTop: 20 }} html={block.html} />}
     </div>
   );
-  const imgCol = block.image
-    ? <img src={block.image} alt={block.imageAlt || ""} className="placeholder-img" style={{ aspectRatio: "4/3", objectFit: "cover" }} />
-    : <Placeholder label={block.placeholder || "image"} />;
+
+  let imgCol;
+  if (block.polaroid) {
+    const pol = block.polaroid === true ? {} : block.polaroid;
+    imgCol = (
+      <Polaroid
+        caption={pol.caption ?? block.placeholder}
+        label={pol.label ?? block.placeholder ?? "photo"}
+        tilt={pol.tilt ?? (block.imageSide === "left" ? "" : "right")}
+        tape={pol.tape !== false}
+        width={pol.width ?? 320}
+      />
+    );
+  } else if (block.image) {
+    imgCol = (
+      <img
+        src={block.image}
+        alt={block.imageAlt || ""}
+        className="placeholder-img"
+        style={{ aspectRatio: "4/3", objectFit: "cover" }}
+      />
+    );
+  } else {
+    imgCol = <Placeholder label={block.placeholder || "image"} />;
+  }
 
   const imageSide = block.imageSide || "right";
   return (
@@ -174,6 +220,36 @@ export default function Block({ block }) {
           style={block.style}
         />
       );
+    case "polaroid":
+      return (
+        <Polaroid
+          caption={block.caption}
+          label={block.label}
+          tilt={block.tilt}
+          tape={block.tape}
+          width={block.width}
+        />
+      );
+    case "phone":
+      return <Phone messages={block.messages} headerName={block.headerName} />;
+    case "terminal":
+      return <Terminal title={block.title} lines={block.lines} />;
+    case "foldcard":
+      return <FoldCard label={block.label} html={block.html} />;
+    case "pullquote":
+      return <PullQuote html={block.html} by={block.by} />;
+    case "bigstamp":
+      return (
+        <div style={{ textAlign: block.align || "center", margin: "32px 0" }}>
+          <BigStamp text={block.text} color={block.color} />
+        </div>
+      );
+    case "checklist":
+      return <Checklist id={block.id} items={block.items} />;
+    case "margindoodle":
+      return <MarginDoodle top={block.top} html={block.html} />;
+    case "dragmatch":
+      return <DragMatch title={block.title} pairs={block.pairs} />;
     case "html":
       return <RichText html={block.html} />;
     default:

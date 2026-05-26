@@ -57,9 +57,9 @@ body {
 .mono        { font-family: "JetBrains Mono", ui-monospace, monospace; }
 
 h1, h2, h3, h4 { margin: 0; font-weight: 700; color: var(--ink); }
-h1 { font-size: 96px; line-height: 0.9; font-family: "Caveat", cursive; font-weight: 700; }
-h2 { font-size: 64px; line-height: 0.95; font-family: "Caveat", cursive; }
-h3 { font-size: 38px; line-height: 1.05; font-family: "Caveat", cursive; }
+h1 { font-size: 88px; line-height: 0.95; font-family: "Caveat", cursive; font-weight: 700; }
+h2 { font-size: 52px; line-height: 1.02; font-family: "Caveat", cursive; }
+h3 { font-size: 36px; line-height: 1.05; font-family: "Caveat", cursive; }
 h4 { font-size: 22px; line-height: 1.2; }
 
 p { margin: 0 0 1em 0; }
@@ -275,7 +275,7 @@ a { color: var(--marker-blue); text-decoration: underline wavy; text-underline-o
   align-items: baseline;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 12px;
+  margin-bottom: 28px;
 }
 
 .metaphor {
@@ -688,13 +688,14 @@ a { color: var(--marker-blue); text-decoration: underline wavy; text-underline-o
   color: var(--ink-soft);
 }
 .hero .meta-row .pill {
-  padding: 4px 12px;
+  padding: 6px 14px;
   background: var(--sticky-yellow);
   border: 1.5px solid var(--ink);
   border-radius: 100px;
   font-family: "Permanent Marker", cursive;
   font-size: 11px;
   letter-spacing: 2px;
+  white-space: nowrap;
 }
 
 /* doodle pieces */
@@ -728,3 +729,609 @@ body[data-humor="dry"] .joke { display: none; }
 
 /* selection */
 ::selection { background: var(--sticky-yellow); color: var(--ink); }
+
+/* ============================================================
+   POLAROID
+   ============================================================ */
+.polaroid {
+  position: relative;
+  display: inline-block;
+  padding: 14px 14px 60px;
+  background: #fffdf6;
+  box-shadow: 3px 5px 0 -1px rgba(0,0,0,0.08), 8px 18px 30px -12px rgba(40, 25, 5, 0.3);
+  transform: rotate(-2deg);
+  transition: transform 0.35s cubic-bezier(.2,.8,.3,1.2);
+  max-width: 100%;
+}
+.polaroid:hover { transform: rotate(-0.5deg) translateY(-4px); }
+.polaroid .photo {
+  position: relative;
+  background:
+    repeating-linear-gradient(45deg, rgba(80,60,20,0.06) 0 8px, transparent 8px 16px),
+    var(--paper-deep);
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--muted);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  padding: 18px;
+  width: 320px;
+  max-width: 100%;
+}
+.polaroid .caption {
+  position: absolute;
+  bottom: 18px; left: 14px; right: 14px;
+  font-family: "Caveat", cursive;
+  font-size: 22px;
+  line-height: 1;
+  text-align: center;
+  color: var(--ink);
+}
+.polaroid .tape-strip {
+  position: absolute;
+  top: -10px; left: 50%;
+  width: 90px; height: 22px;
+  background: var(--tape);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-left: 1px dashed rgba(0,0,0,0.08);
+  border-right: 1px dashed rgba(0,0,0,0.08);
+  transform: translateX(-50%) rotate(-3deg);
+}
+.polaroid.right { transform: rotate(2deg); }
+.polaroid.right:hover { transform: rotate(0.5deg) translateY(-4px); }
+.polaroid.flat { transform: rotate(0); }
+.polaroid.flat:hover { transform: translateY(-4px); }
+
+/* ============================================================
+   PHONE MOCKUP
+   ============================================================ */
+.phone {
+  position: relative;
+  width: 280px;
+  height: 540px;
+  background: var(--ink);
+  border-radius: 36px;
+  padding: 14px;
+  box-shadow:
+    inset 0 0 0 2px #2a241c,
+    6px 8px 0 -2px rgba(0,0,0,0.12),
+    14px 24px 40px -15px rgba(40, 25, 5, 0.45);
+  margin: 0 auto;
+  transform: rotate(-1deg);
+}
+.phone::before {
+  content: "";
+  position: absolute;
+  top: 16px; left: 50%;
+  transform: translateX(-50%);
+  width: 88px; height: 22px;
+  background: var(--ink);
+  border-radius: 0 0 12px 12px;
+  z-index: 3;
+}
+.phone-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #f7f3e9;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.phone-statusbar {
+  height: 38px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 22px 4px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+  background: transparent;
+}
+.phone-statusbar .battery {
+  display: inline-block;
+  width: 22px; height: 10px;
+  border: 1.2px solid var(--ink);
+  border-radius: 2px;
+  position: relative;
+  margin-left: 4px;
+}
+.phone-statusbar .battery::after {
+  content: "";
+  position: absolute;
+  inset: 1.5px;
+  width: 70%;
+  background: var(--ink);
+}
+.phone-statusbar .battery::before {
+  content: "";
+  position: absolute;
+  right: -3px; top: 2px; bottom: 2px;
+  width: 2px;
+  background: var(--ink);
+}
+.phone-header {
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--rule);
+  font-family: "Caveat", cursive;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.phone-header .avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--sticky-mint);
+  border: 1.5px solid var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Permanent Marker", cursive;
+  font-size: 12px;
+}
+.phone-body {
+  flex: 1;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+.phone-msg {
+  max-width: 75%;
+  padding: 8px 12px;
+  border-radius: 16px;
+  font-family: "Nunito", sans-serif;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.phone-msg.them { align-self: flex-start; background: #fff; border: 1px solid var(--rule); border-radius: 16px 16px 16px 4px; }
+.phone-msg.you  { align-self: flex-end;   background: var(--sticky-yellow); border-radius: 16px 16px 4px 16px; }
+.phone-msg.typing {
+  display: inline-flex; gap: 4px; align-items: center; min-height: 30px;
+}
+.phone-msg.typing span {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--muted);
+  animation: typing 1.2s infinite;
+}
+.phone-msg.typing span:nth-child(2) { animation-delay: 0.15s; }
+.phone-msg.typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typing {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+.phone-input {
+  border-top: 1px solid var(--rule);
+  padding: 10px 14px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.phone-input .field {
+  flex: 1;
+  padding: 6px 10px;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  font-family: "Nunito", sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+}
+.phone-input .send {
+  width: 26px; height: 26px;
+  background: var(--marker-blue);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* ============================================================
+   TERMINAL
+   ============================================================ */
+.terminal {
+  position: relative;
+  background: #1a1612;
+  border-radius: 10px;
+  border: 2px solid var(--ink);
+  box-shadow: 4px 6px 0 -1px rgba(0,0,0,0.1);
+  overflow: hidden;
+  font-family: "JetBrains Mono", monospace;
+  margin: 28px 0;
+  transform: rotate(-0.3deg);
+}
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #2a221a;
+  border-bottom: 1px solid #3a2f24;
+}
+.terminal-bar .dot {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.4);
+}
+.terminal-bar .dot.r { background: #ff5f57; }
+.terminal-bar .dot.y { background: #febc2e; }
+.terminal-bar .dot.g { background: #28c840; }
+.terminal-bar .title {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  color: #8a7e69;
+  letter-spacing: 1px;
+}
+.terminal-body {
+  padding: 18px 20px;
+  color: #e8dfc8;
+  font-size: 13px;
+  line-height: 1.7;
+  min-height: 140px;
+}
+.terminal-body .prompt { color: #6ec070; font-weight: 700; }
+.terminal-body .cmd    { color: #f7f3e9; }
+.terminal-body .out    { color: #b8ad94; }
+.terminal-body .ts     { color: #67768c; }
+.terminal-body .ok     { color: #7eb88a; }
+.terminal-body .cursor {
+  display: inline-block;
+  width: 8px; height: 16px;
+  background: #e8dfc8;
+  vertical-align: -3px;
+  margin-left: 2px;
+  animation: blink 1.05s steps(2) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ============================================================
+   ANIMATED ARROW — draws when in view
+   ============================================================ */
+.arrow-svg path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.arrow-svg.draw path {
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+}
+.arrow-svg.draw .arrow-head { opacity: 0; }
+.arrow-svg.draw.in-view path {
+  animation: drawArrow 1.1s cubic-bezier(.5,.1,.3,1) forwards;
+}
+.arrow-svg.draw.in-view .arrow-head {
+  animation: fadeIn 0.3s 0.95s forwards;
+}
+@keyframes drawArrow {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* ============================================================
+   HIGHLIGHT-ON-SCROLL
+   ============================================================ */
+.highlight-anim {
+  background-image: linear-gradient(transparent 55%, var(--highlight) 55%, var(--highlight) 92%, transparent 92%);
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  padding: 0 2px;
+}
+.highlight-anim.in-view { animation: hlSweep 0.9s cubic-bezier(.5,.1,.3,1) 0.15s forwards; }
+.highlight-anim.blue   { background-image: linear-gradient(transparent 55%, #aac8e599 55%, #aac8e599 92%, transparent 92%); }
+.highlight-anim.pink   { background-image: linear-gradient(transparent 55%, #f7b7c299 55%, #f7b7c299 92%, transparent 92%); }
+.highlight-anim.green  { background-image: linear-gradient(transparent 55%, #b4e1ce99 55%, #b4e1ce99 92%, transparent 92%); }
+@keyframes hlSweep {
+  from { background-size: 0% 100%; }
+  to   { background-size: 100% 100%; }
+}
+
+/* ============================================================
+   STAMP
+   ============================================================ */
+.big-stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 110px; height: 110px;
+  font-family: "Permanent Marker", cursive;
+  font-size: 20px;
+  letter-spacing: 1.5px;
+  color: var(--marker-red);
+  border: 3px solid var(--marker-red);
+  border-radius: 50%;
+  text-align: center;
+  line-height: 0.95;
+  position: relative;
+  background: rgba(197, 54, 43, 0.04);
+  opacity: 0;
+  transform: scale(2) rotate(40deg);
+  text-transform: uppercase;
+}
+.big-stamp::before, .big-stamp::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1.5px solid var(--marker-red);
+  border-radius: 50%;
+  opacity: 0.4;
+}
+.big-stamp::after { inset: 14px; opacity: 0.25; }
+.big-stamp.stamp-in {
+  animation: stampIn 0.5s cubic-bezier(.3,1.6,.4,1) forwards;
+}
+@keyframes stampIn {
+  0%   { opacity: 0;   transform: scale(2) rotate(40deg); }
+  60%  { opacity: 1;   transform: scale(0.92) rotate(-15deg); }
+  100% { opacity: 0.9; transform: scale(1) rotate(-12deg); }
+}
+.big-stamp.green { color: var(--marker-green); border-color: var(--marker-green); background: rgba(46, 125, 79, 0.04); }
+.big-stamp.green::before, .big-stamp.green::after { border-color: var(--marker-green); }
+
+/* ============================================================
+   FOLDED CORNER (for collapsible head when open)
+   ============================================================ */
+.fold-card {
+  position: relative;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 22px 26px;
+  box-shadow: 3px 5px 0 -1px rgba(0,0,0,0.08);
+  margin: 24px 0;
+  overflow: visible;
+}
+.fold-card::after {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 32px; height: 32px;
+  background:
+    linear-gradient(225deg, transparent 50%, var(--paper-deep) 50%, var(--paper-edge) 100%);
+  border-bottom-left-radius: 6px;
+  box-shadow: -2px 2px 4px rgba(0,0,0,0.1);
+  border-top-right-radius: 6px;
+}
+.fold-card .fold-label {
+  font-family: "Permanent Marker", cursive;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+/* ============================================================
+   DRAG-TO-MATCH
+   ============================================================ */
+.dragmatch {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 90px 1fr;
+  gap: 0 16px;
+  margin: 32px 0;
+  padding: 24px;
+  background: rgba(255, 250, 230, 0.4);
+  border: 1.5px dashed var(--rule);
+  border-radius: 6px;
+}
+.dragmatch-title {
+  grid-column: 1 / -1;
+  font-family: "Permanent Marker", cursive;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.dragmatch-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dragmatch-item {
+  padding: 12px 14px;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 10px 6px 12px 8px / 8px 12px 6px 10px;
+  font-family: "Caveat", cursive;
+  font-size: 22px;
+  line-height: 1.1;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+  box-shadow: 2px 3px 0 -1px rgba(0,0,0,0.08);
+  position: relative;
+}
+.dragmatch-item:hover { transform: translateY(-2px); box-shadow: 3px 5px 0 -1px rgba(0,0,0,0.12); }
+.dragmatch-item.selected {
+  background: var(--sticky-yellow);
+  transform: rotate(-1deg) translateY(-2px);
+  box-shadow: 0 0 0 3px var(--marker-red);
+}
+.dragmatch-item.matched {
+  background: var(--sticky-mint);
+  cursor: default;
+  opacity: 0.85;
+}
+.dragmatch-item.matched::after {
+  content: "✓";
+  position: absolute;
+  right: 10px; top: 50%;
+  transform: translateY(-50%);
+  font-family: "Permanent Marker", cursive;
+  color: var(--marker-green);
+  font-size: 22px;
+}
+.dragmatch-item.wrong {
+  animation: shake 0.5s;
+  background: #fff0ee;
+  border-color: var(--marker-red);
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.dragmatch-lines {
+  position: relative;
+}
+.dragmatch-lines svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.dragmatch-feedback {
+  grid-column: 1 / -1;
+  margin-top: 14px;
+  font-family: "Caveat", cursive;
+  font-size: 22px;
+  min-height: 28px;
+  color: var(--marker-green);
+}
+.dragmatch-feedback.err { color: var(--marker-red); }
+
+/* ============================================================
+   PULL QUOTE / ARROW LABEL
+   ============================================================ */
+.pull-quote {
+  position: relative;
+  padding: 24px 28px 24px 60px;
+  margin: 32px 0;
+  font-family: "Caveat", cursive;
+  font-size: 32px;
+  line-height: 1.15;
+  color: var(--ink);
+  max-width: 720px;
+}
+.pull-quote::before {
+  content: "❝";
+  position: absolute;
+  left: 8px; top: -16px;
+  font-family: serif;
+  font-size: 90px;
+  color: var(--marker-red);
+  line-height: 1;
+  opacity: 0.7;
+}
+.pull-quote .by {
+  display: block;
+  font-family: "Permanent Marker", cursive;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-top: 12px;
+}
+
+/* ============================================================
+   CHECKBOX (hand-drawn)
+   ============================================================ */
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0;
+}
+.checklist li {
+  position: relative;
+  padding: 6px 0 6px 36px;
+  font-family: "Caveat", cursive;
+  font-size: 24px;
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+}
+.checklist li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 8px;
+  width: 22px; height: 22px;
+  border: 2px solid var(--ink);
+  border-radius: 6px 4px 7px 5px / 5px 7px 4px 6px;
+  background: #fff;
+}
+.checklist li.done::before {
+  background: var(--sticky-yellow);
+}
+.checklist li.done::after {
+  content: "✓";
+  position: absolute;
+  left: 2px; top: -2px;
+  font-family: "Permanent Marker", cursive;
+  font-size: 32px;
+  color: var(--marker-green);
+  transform: rotate(-8deg);
+}
+.checklist li.done {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--marker-red);
+}
+
+/* ============================================================
+   MARGIN DOODLES that pop in
+   ============================================================ */
+.margin-doodle {
+  position: absolute;
+  left: -110px;
+  width: 90px;
+  opacity: 0;
+  transform: translateX(-10px) rotate(-6deg);
+  pointer-events: none;
+}
+.margin-doodle.in-view {
+  animation: doodleIn 0.6s cubic-bezier(.2,.8,.3,1.3) forwards;
+}
+@keyframes doodleIn {
+  from { opacity: 0; transform: translateX(-10px) rotate(-6deg); }
+  to   { opacity: 1; transform: translateX(0) rotate(-6deg); }
+}
+.margin-doodle .hand {
+  font-size: 20px;
+  color: var(--marker-red);
+  line-height: 1;
+}
+@media (max-width: 1100px) {
+  .margin-doodle { display: none; }
+}
+
+/* ============================================================
+   FLIPCARD WOBBLE on hover
+   ============================================================ */
+.flipcard:not(.flipped) .flipcard-inner:hover {
+  transform: rotate(-1.5deg) translateY(-3px);
+}
+
+/* ============================================================
+   BUTTON (hand-drawn)
+   ============================================================ */
+.hd-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--sticky-yellow);
+  border: 2px solid var(--ink);
+  border-radius: 10px 6px 12px 8px / 8px 12px 6px 10px;
+  font-family: "Permanent Marker", cursive;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 3px 4px 0 -1px rgba(0,0,0,0.18);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.hd-btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 5px 0 -1px rgba(0,0,0,0.2); }
+.hd-btn:active { transform: translate(2px, 2px); box-shadow: 1px 2px 0 -1px rgba(0,0,0,0.15); }
+.hd-btn.ghost { background: transparent; }
+.hd-btn.red { background: #fff0ee; color: var(--marker-red); border-color: var(--marker-red); }

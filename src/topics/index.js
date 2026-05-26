@@ -6,9 +6,10 @@
  * The order here is the order shown in the sidebar.
  */
 import ai from "./ai.json";
+import ai2 from "./ai2.json";
 import nodejs from "./nodejs.json";
 import devops from "./devops.json";
 
-const TOPICS = [ai, nodejs, devops];
+const TOPICS = [ai, ai2, nodejs, devops];
 
 export default TOPICS;

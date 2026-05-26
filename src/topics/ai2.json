@@ -1,0 +1,1635 @@
+{
+  "id": "ai2",
+  "label": "AI PTBR enhanced",
+  "icon": "🤖",
+  "vol": "VOL 01",
+  "hero": {
+    "kicker": "★ MARGIN NOTES · VOL 01",
+    "title": "IA sem mágica:<br/>do <span class=\"swap\">chatbot</span> ao dogfood loop",
+    "subtitle": "(agentes, skills, cron, state file e bugs encontrados enquanto você dorme.)",
+    "lead": "Um guia rabiscado, prático e meio bagunceiro para entender como um LLM deixa de ser uma caixinha de texto e vira um agente que usa ferramentas, roda cenários, abre issues e tenta consertar bugs com freio de mão puxado.",
+    "pills": [
+      {
+        "label": "~45 MIN READ",
+        "color": "yellow"
+      },
+      {
+        "label": "12 LESSONS",
+        "color": "mint"
+      },
+      {
+        "label": "3 LEVELS",
+        "color": "pink"
+      }
+    ],
+    "note": "← arraste as abas na direita; escreva nos campos de reflexão; brigue com o texto →"
+  },
+  "welcomeStickies": [
+    {
+      "color": "yellow",
+      "tilt": "tilt2",
+      "tape": true,
+      "html": "✎ Como ler isto:<br/><br/>não tente decorar. Procure padrões. Cada lição é uma peça do mesmo robô: modelo, ferramenta, memória, agenda, segurança."
+    },
+    {
+      "color": "pink",
+      "tilt": "tilt3",
+      "tape": true,
+      "html": "✎ Promessa anti-aula-chata:<br/><br/>sem equações. sem professor invisível julgando. se uma frase parece manual de geladeira, ela perdeu a briga."
+    },
+    {
+      "color": "mint",
+      "tilt": "right",
+      "tape": true,
+      "html": "✎ O dogfood loop em uma frase:<br/><br/>um agente que usa seu próprio app como usuário, acha coisas quebradas, decide o que pode consertar e deixa o perigoso para humano revisar."
+    }
+  ],
+  "tocTitle": "Mapa de sobrevivência: da palavra bonita até o agente que roda sozinho",
+  "levels": [
+    {
+      "id": "basic",
+      "label": "BASIC",
+      "topics": "LLMs · Chatbots · Tools · Dogfooding",
+      "intro": "— primeiro, o que a máquina é. depois, o que ela não é. isso evita 80% da confusão.",
+      "lessons": [
+        {
+          "id": 1,
+          "tag": "LESSON 01 · BASIC",
+          "number": "01",
+          "screenLabel": "L1 LLM",
+          "title": "Um LLM é um <span class=\"marker-underline\">papagaio estatístico</span> com crachá",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "right",
+              "sticky": {
+                "color": "yellow",
+                "tape": true,
+                "html": "Imagine um papagaio que leu a internet inteira, decorou jeitos de falar, viu milhões de exemplos e agora responde como se tivesse entendido. Às vezes ele acerta. Às vezes ele inventa com gravata.",
+                "tilt": "tilt2"
+              },
+              "html": "<p>Um LLM não é uma mente presa no computador. É um modelo que transforma texto em números, usa esses números para prever o próximo pedaço de texto e repete isso muitas vezes. <span class=\"highlight\">A inteligência aparece como efeito colateral de muita previsão bem treinada.</span></p><p class=\"joke\">O termo elegante é \"modelo de linguagem\". O termo honesto é: autocomplete que fez intercâmbio, leu Stack Overflow e voltou confiante demais.</p>",
+              "placeholder": "metáfora: um papagaio de terno em cima de uma pilha de livros, segurando um crachá escrito 'LLM'"
+            },
+            {
+              "type": "diagram",
+              "label": "O QUE ENTRA, O QUE SAI",
+              "layout": "flex-row",
+              "gap": 24,
+              "justify": "center",
+              "items": [
+                {
+                  "kind": "node",
+                  "color": "yellow",
+                  "label": "Texto",
+                  "caption": "seu prompt"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    5,
+                    30
+                  ],
+                  "to": [
+                    90,
+                    30
+                  ],
+                  "curve": -10,
+                  "width": 100,
+                  "height": 60,
+                  "label": "vira"
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "Tokens",
+                  "caption": "pedaços"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    5,
+                    30
+                  ],
+                  "to": [
+                    90,
+                    30
+                  ],
+                  "curve": 10,
+                  "width": 100,
+                  "height": 60,
+                  "label": "passam por"
+                },
+                {
+                  "kind": "node",
+                  "color": "pink",
+                  "label": "Modelo",
+                  "caption": "bilhões de dials"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    5,
+                    30
+                  ],
+                  "to": [
+                    90,
+                    30
+                  ],
+                  "curve": -10,
+                  "width": 100,
+                  "height": 60,
+                  "label": "prevê"
+                },
+                {
+                  "kind": "node",
+                  "color": "sky",
+                  "label": "Próximo token",
+                  "caption": "e repete"
+                }
+              ],
+              "caption": "o truque não é uma resposta inteira de uma vez; é uma sequência de pequenas apostas."
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "MITO FOFO",
+                "html": "<p>\"A IA entende o mundo como uma pessoa, só que mais rápido.\"</p>"
+              },
+              "good": {
+                "label": "MAIS ÚTIL",
+                "html": "<p>\"A IA aprendeu padrões de linguagem e usa esses padrões para gerar respostas que podem parecer raciocínio.\"</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — parâmetros, treinamento e alucinação",
+              "html": "<p>Durante o treinamento, o modelo vê exemplos e ajusta bilhões de parâmetros: pequenos números internos que influenciam o que ele prevê. Ninguém escreve uma regra manual para cada resposta. O sistema aprende regularidades estatísticas.</p><p>Quando ele erra com confiança, chamamos de <span class=\"circle-it\">alucinação</span>. Não é mentira no sentido humano. É uma previsão plausível que não foi amarrada a um sensor externo, documento, teste ou ferramenta.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "Por que o modelo pode explicar um conceito bem e errar uma data simples?",
+                  "answer": "Porque linguagem plausível não é a mesma coisa que verificação. Sem fonte, ferramenta ou memória confiável, ele está estimando a resposta pelo padrão."
+                },
+                {
+                  "question": "Qual é a primeira pergunta prática ao usar um LLM?",
+                  "answer": "\"Ele precisa apenas escrever, ou precisa verificar algo no mundo?\" Se precisa verificar, você quer ferramenta, fonte, teste ou dado externo."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "ai-l1-reflect",
+              "prompt": "Pense em uma resposta de IA que pareceu convincente. O que teria servido como sensor externo para verificar aquilo?",
+              "hint": "ex.: link oficial, teste automatizado, logs, banco de dados, pessoa responsável..."
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "tag": "LESSON 02 · BASIC",
+          "number": "02",
+          "screenLabel": "L2 Contexto",
+          "title": "Contexto é a <span class=\"marker-underline blue\">mochila</span> do modelo",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "left",
+              "sticky": {
+                "color": "mint",
+                "tape": true,
+                "html": "Imagine uma trilha. Você só pode levar o que cabe na mochila. Colocou muita coisa? A lanterna cai. Depois você pergunta: \"cadê a lanterna?\" e a mochila responde: \"qual lanterna?\"",
+                "tilt": "right"
+              },
+              "html": "<p>O modelo não lembra do jeito humano. A aplicação manda uma janela de contexto com instruções, conversa, arquivos e resultados de ferramentas. <span class=\"highlight\">Tudo que não couber nessa mochila vira passado arqueológico.</span></p><p class=\"joke\">É por isso que chat longo fica estranho: o assistente não \"ficou burro\". Ele está tentando correr uma maratona carregando recibos, prints, sua ansiedade e três commits quebrados.</p>",
+              "placeholder": "metáfora: uma mochila estourando de papéis, tokens caindo pelo zíper, uma lanterna no chão"
+            },
+            {
+              "type": "diagram",
+              "label": "MEMÓRIA DE CHAT VS ESTADO REAL",
+              "layout": "grid",
+              "gridTemplateColumns": "1fr auto 1fr",
+              "items": [
+                {
+                  "kind": "node",
+                  "color": "yellow",
+                  "label": "Context window",
+                  "caption": "memória de trabalho"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    10,
+                    30
+                  ],
+                  "to": [
+                    120,
+                    30
+                  ],
+                  "curve": 0,
+                  "width": 130,
+                  "height": 60,
+                  "label": "pode lotar"
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "State file",
+                  "caption": "memória em disco"
+                },
+                {
+                  "kind": "text",
+                  "html": "<span class=\"hand\" style=\"font-size:22px;color:var(--marker-red)\">some quando a sessão muda</span>",
+                  "style": {
+                    "gridColumn": "1"
+                  }
+                },
+                {
+                  "kind": "text",
+                  "html": "<span class=\"hand\" style=\"font-size:22px;color:var(--marker-green)\">sobrevive ao processo morrer</span>",
+                  "style": {
+                    "gridColumn": "3"
+                  }
+                }
+              ],
+              "caption": "contexto é ótimo para pensar agora; estado persistente é melhor para continuar amanhã."
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "CONFUSÃO COMUM",
+                "html": "<p>\"O agente já sabe o que fez ontem porque a conversa estava aberta.\"</p>"
+              },
+              "good": {
+                "label": "PÉ NO CHÃO",
+                "html": "<p>\"Se o trabalho precisa continuar depois de um fire, escreva em disco. Conversa não é banco de dados.\"</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — tokens não são palavras perfeitas",
+              "html": "<p>Texto vira tokens: pedaços de palavra, símbolos, espaços e fragmentos. O limite de contexto é contado nesses pedaços, não em páginas humanas. Arquivos grandes, logs e histórico de tool calls podem encher a janela rápido.</p><p>No dogfood loop, isso vira problema real: cada disparo do cron adiciona mais conversa. O state file reduz a dependência da memória da sessão, mas não impede o consumo linear de contexto.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "Por que um state file ajuda mais que \"continua de onde parou\"?",
+                  "answer": "Porque ele transforma progresso em artefato. O modelo pode reler um arquivo curto e atualizado, em vez de depender de uma conversa gigante e frágil."
+                },
+                {
+                  "question": "O que você salvaria no state file de um agente bug hunter?",
+                  "answer": "Cenários, contagem de runs, findings, branches criadas, issues abertas, horário de parada, status do loop e log de cada fire."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "ai-l2-reflect",
+              "prompt": "Qual tarefa sua falharia se o agente esquecesse o que já tentou? Que informação mínima você salvaria em um state file?",
+              "hint": "pense em id de ticket, último passo executado, decisão tomada, resultado observado..."
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "tag": "LESSON 03 · BASIC",
+          "number": "03",
+          "screenLabel": "L3 Agente",
+          "title": "Um agente é um <span class=\"marker-underline green\">estagiário com ferramentas</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "right",
+              "sticky": {
+                "color": "pink",
+                "tape": true,
+                "html": "Você não diz: \"mova o mouse 12 pixels, clique, abra o terminal, rode teste\". Você diz: \"descobre por que o login quebrou\". O estagiário olha em volta, pega ferramentas e tenta não derrubar produção.",
+                "tilt": "tilt3"
+              },
+              "html": "<p>Um chatbot responde. Um agente decide o próximo passo, usa uma ferramenta, observa o resultado e decide de novo. <span class=\"highlight\">A mágica prática é o loop pensar → agir → observar.</span></p><p class=\"joke\">A diferença entre \"chatbot\" e \"agente\" é a diferença entre alguém te dando receita de bolo e alguém colocando farinha na sua cozinha. A segunda opção exige confiança e pano de chão.</p>",
+              "placeholder": "metáfora: um estagiário com crachá 'agent', carregando navegador, terminal, lupa e um extintor pequeno"
+            },
+            {
+              "type": "diagram",
+              "label": "O LOOP AGÊNTICO",
+              "layout": "flex-row",
+              "gap": 28,
+              "justify": "center",
+              "items": [
+                {
+                  "kind": "node",
+                  "color": "yellow",
+                  "label": "Plan",
+                  "caption": "qual próximo passo?"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    5,
+                    30
+                  ],
+                  "to": [
+                    80,
+                    30
+                  ],
+                  "curve": -10,
+                  "width": 90,
+                  "height": 60
+                },
+                {
+                  "kind": "node",
+                  "color": "pink",
+                  "label": "Act",
+                  "caption": "usa ferramenta"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    5,
+                    30
+                  ],
+                  "to": [
+                    80,
+                    30
+                  ],
+                  "curve": 10,
+                  "width": 90,
+                  "height": 60
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "Observe",
+                  "caption": "lê resultado"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    5,
+                    30
+                  ],
+                  "to": [
+                    130,
+                    30
+                  ],
+                  "curve": 42,
+                  "width": 140,
+                  "height": 60,
+                  "color": "red",
+                  "label": "volta"
+                }
+              ],
+              "caption": "quando o ambiente responde, o agente ganha feedback. sem feedback, ele só escreve bonito."
+            },
+            {
+              "type": "mockui",
+              "url": "agent.local/session",
+              "height": 280,
+              "annotations": [
+                {
+                  "x": -170,
+                  "y": 54,
+                  "text": "↗ objetivo humano"
+                },
+                {
+                  "x": "100%",
+                  "y": 118,
+                  "text": "↖ ações visíveis",
+                  "style": {
+                    "marginLeft": 12,
+                    "color": "var(--marker-blue)"
+                  }
+                },
+                {
+                  "x": "100%",
+                  "y": 210,
+                  "text": "↖ parar aqui é obrigatório",
+                  "style": {
+                    "marginLeft": 12,
+                    "color": "var(--marker-red)"
+                  }
+                }
+              ],
+              "html": "<div style='display:flex;flex-direction:column;gap:10px;font-family:Nunito'><div style='background:var(--sticky-yellow);padding:10px 12px;border-radius:8px'><b>Você:</b> Rode o fluxo de cadastro e me diga se algo quebra.</div><div style='background:#f0eee5;padding:10px 12px;border-radius:8px;font-size:13px'><span class='mono' style='font-size:11px;color:var(--marker-blue)'>↳ opening browser...</span><br/><span class='mono' style='font-size:11px;color:var(--marker-blue)'>↳ filling signup form...</span><br/><span class='mono' style='font-size:11px;color:var(--marker-blue)'>↳ found error: email confirmation button hidden</span></div><div style='display:flex;gap:8px'><button style='padding:6px 12px;border:1.5px solid var(--ink);background:#fff;border-radius:6px;font-family:Caveat;font-size:18px'>abrir issue</button><button style='padding:6px 12px;border:1.5px solid var(--marker-red);background:#fff;color:var(--marker-red);border-radius:6px;font-family:Caveat;font-size:18px'>não commitar</button></div></div>"
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — ReAct sem virar palestra",
+              "html": "<p>O padrão clássico para agente de LLM intercala raciocínio e ação: o modelo escolhe uma ação, recebe uma observação, atualiza o plano e continua. Na prática de coding agents, as ações são chamadas de ferramentas: Bash, leitura de arquivo, edição, navegador, GitHub, cron.</p><p>O detalhe adulto: cada ferramenta aumenta poder e risco. Ler arquivo é barato. Editar código é mais sério. Criar issue é reversível. Dar push é outro planeta.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "Quando um chatbot vira agente?",
+                  "answer": "Quando ele não só responde, mas escolhe e executa ações em um ambiente: terminal, navegador, arquivos, APIs, banco de dados."
+                },
+                {
+                  "question": "Qual é a pergunta de segurança antes de dar uma ferramenta?",
+                  "answer": "\"O dano de uma ação errada é reversível?\" Quanto menos reversível, mais aprovação humana e caps você quer."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "ai-l3-reflect",
+              "prompt": "Escolha uma ferramenta que você daria a um agente e uma que você não daria. O que muda entre elas?",
+              "hint": "ex.: ler logs vs deletar dados; abrir issue vs fazer deploy; rodar teste vs dar push."
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "tag": "LESSON 04 · BASIC",
+          "number": "04",
+          "screenLabel": "L4 Dogfood",
+          "title": "Dogfooding é <span class=\"marker-underline\">comer a própria ração</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "left",
+              "sticky": {
+                "color": "sky",
+                "tape": true,
+                "html": "Você fabrica ração. Antes de vender, alguém da casa precisa provar. Se até o cachorro da fábrica faz cara feia, talvez o cliente também faça.",
+                "tilt": "right"
+              },
+              "html": "<p>Em software, dogfooding é usar o próprio produto para descobrir dor antes do usuário descobrir. No dogfood loop, quem usa o app é um agente com navegador. <span class=\"highlight\">Ele vira um usuário incansável, meio literal, que clica e reclama em Markdown.</span></p><p class=\"joke\">É QA com insônia. Só que em vez de café, ele consome contexto.</p>",
+              "placeholder": "metáfora: um cachorro-robô testando uma tigela de ração com etiqueta 'staging app'"
+            },
+            {
+              "type": "diagram",
+              "label": "O QUE O DOGFOOD LOOP FAZ",
+              "layout": "flex-column",
+              "gap": 12,
+              "items": [
+                {
+                  "kind": "node",
+                  "color": "yellow",
+                  "label": "1. Abre o app",
+                  "caption": "como usuário real"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    50,
+                    0
+                  ],
+                  "to": [
+                    50,
+                    45
+                  ],
+                  "curve": 0,
+                  "width": 70,
+                  "height": 45
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "2. Roda um cenário",
+                  "caption": "login, checkout, onboarding..."
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    50,
+                    0
+                  ],
+                  "to": [
+                    50,
+                    45
+                  ],
+                  "curve": 0,
+                  "width": 70,
+                  "height": 45
+                },
+                {
+                  "kind": "node",
+                  "color": "pink",
+                  "label": "3. Classifica achados",
+                  "caption": "fixável ou issue?"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    50,
+                    0
+                  ],
+                  "to": [
+                    50,
+                    45
+                  ],
+                  "curve": 0,
+                  "width": 70,
+                  "height": 45
+                },
+                {
+                  "kind": "node",
+                  "color": "sky",
+                  "label": "4. Conserta ou reporta",
+                  "caption": "com travas"
+                }
+              ],
+              "caption": "o loop não é só navegação; é navegação + triagem + ação limitada + registro."
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "QA MANUAL PURO",
+                "html": "<p>\"Abre o app quando der, clica em umas coisas e manda print no Slack.\"</p>"
+              },
+              "good": {
+                "label": "DOGFOOD LOOP",
+                "html": "<p>\"Rode um cenário definido, salve evidência, classifique por critérios, escreva issue ou fix mínimo e registre o run.\"</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — o gist é o setup, não o milagre",
+              "html": "<p>O gist funciona como wizard: ele pergunta configuração, descobre ambiente, cria o state file e agenda o prompt. O loop real acontece depois, em cada disparo agendado.</p><p>A arquitetura tem três pernas: <span class=\"circle-it\">cron como driver</span>, prompt auto-contido como programa, e state file como memória durável. Sem uma dessas, o robô manca.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "Por que o agente usa um navegador em vez de só ler código?",
+                  "answer": "Porque muitos bugs só aparecem no comportamento real: botão escondido, fluxo confuso, erro de tracking, estado visual, resposta lenta, tela quebrada."
+                },
+                {
+                  "question": "Por que dogfood não substitui QA humano?",
+                  "answer": "Porque o agente encontra sinais e executa padrões. Humanos ainda julgam produto, prioridade, intenção e impacto."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "ai-l4-reflect",
+              "prompt": "Qual fluxo do seu app/projeto seria perfeito para um cachorro-robô testar toda hora?",
+              "hint": "procure um fluxo repetitivo, importante e com evidência clara de sucesso ou falha."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "intermediate",
+      "label": "INTERMEDIATE",
+      "topics": "Prompt as Program · Skills · State · Cron · Wizard",
+      "intro": "— agora o robô ganha receitas, agenda e memória. ele começa a parecer útil e perigoso ao mesmo tempo.",
+      "lessons": [
+        {
+          "id": 5,
+          "tag": "LESSON 05 · INTERMEDIATE",
+          "number": "05",
+          "screenLabel": "L5 Prompt Program",
+          "title": "Prompt bom é uma <span class=\"marker-underline blue\">receita executável</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "right",
+              "sticky": {
+                "color": "yellow",
+                "tape": true,
+                "html": "Receita ruim: \"faz um jantar legal\". Receita boa: ingredientes, ordem, tempo, quando parar, o que fazer se queimar, e a frase exata: \"não invente flambado se o fogão estiver pegando fogo\".",
+                "tilt": "tilt2"
+              },
+              "html": "<p>No dogfood loop, o prompt não é só pedido. Ele é programa: contém objetivo, variáveis, constraints, critérios de categoria, comandos, output esperado e condição de parada. <span class=\"highlight\">Cada fire precisa carregar o próprio cérebro dentro do prompt.</span></p><p class=\"joke\">Prompt auto-contido é tipo marmita: se você esqueceu o garfo, não adianta reclamar com o micro-ondas.</p>",
+              "placeholder": "metáfora: uma receita de cozinha cheia de etiquetas XML, timer, checklist e uma placa 'não pule etapas'"
+            },
+            {
+              "type": "diagram",
+              "label": "ANATOMIA DE UM PROMPT CÁPSULA",
+              "layout": "grid",
+              "gridTemplateColumns": "repeat(3, 1fr)",
+              "items": [
+                {
+                  "kind": "node",
+                  "color": "yellow",
+                  "label": "Contexto",
+                  "caption": "URL, repo, branch"
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "Regras",
+                  "caption": "não pushar, caps"
+                },
+                {
+                  "kind": "node",
+                  "color": "pink",
+                  "label": "Critérios",
+                  "caption": "decision tree"
+                },
+                {
+                  "kind": "node",
+                  "color": "sky",
+                  "label": "Ações",
+                  "caption": "testar, fixar, issue"
+                },
+                {
+                  "kind": "node",
+                  "color": "yellow",
+                  "label": "Estado",
+                  "caption": "read first/write last"
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "Saída",
+                  "caption": "uma linha parseável"
+                }
+              ],
+              "caption": "o prompt vira um contrato operacional, não um parágrafo motivacional."
+            },
+            {
+              "type": "mockui",
+              "url": "claude-code.local/prompt",
+              "height": 270,
+              "annotations": [
+                {
+                  "x": -180,
+                  "y": 45,
+                  "text": "↗ seções claras"
+                },
+                {
+                  "x": "100%",
+                  "y": 132,
+                  "text": "↖ regras que não dependem de memória",
+                  "style": {
+                    "marginLeft": 12
+                  }
+                },
+                {
+                  "x": 160,
+                  "y": 247,
+                  "text": "↑ formato final fácil de verificar",
+                  "style": {
+                    "color": "var(--marker-green)"
+                  }
+                }
+              ],
+              "html": "<pre class='mono' style='font-size:11px;line-height:1.45;margin:0;white-space:pre-wrap'>&lt;critical_constraints&gt;\n  NEVER push. NEVER commit to trunk.\n  Max 3 fixes. Read state first, write last.\n&lt;/critical_constraints&gt;\n\n&lt;categorization_criteria&gt;\n  backend_fix → tracking_fix → ui_issue → needs_product\n&lt;/categorization_criteria&gt;\n\n&lt;output_format&gt;\n  [LOOP] scenario=X fixes=Y issues=Z status=ACTIVE\n&lt;/output_format&gt;</pre>"
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — por que usar tags tipo XML?",
+              "html": "<p>Tags como <code>&lt;critical_constraints&gt;</code> e <code>&lt;categorization_criteria&gt;</code> funcionam como placas de trânsito no prompt. Elas separam instrução, contexto, critérios e formato de saída.</p><p>Não precisa ser XML válido. O valor está na estrutura: o modelo tem menos chance de tratar exemplo como ordem, regra como comentário, ou saída esperada como sugestão fofa.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "Por que o prompt do cron precisa ser auto-contido?",
+                  "answer": "Porque cada disparo deve funcionar como uma cápsula. Ele não pode depender de uma conversa antiga, de contexto implícito ou de você lembrando o agente."
+                },
+                {
+                  "question": "Qual é o cheiro de prompt frágil?",
+                  "answer": "Ele diz \"como combinamos acima\", \"continue daí\" ou \"faça do jeito usual\". Isso só funciona enquanto a memória não trai você."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "ai-l5-reflect",
+              "prompt": "Pegue uma automação que você pediria para um agente. Que três seções obrigatórias seu prompt-programa teria?",
+              "hint": "ex.: objetivo, constraints, critérios de sucesso, formato de saída, plano de rollback."
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "tag": "LESSON 06 · INTERMEDIATE",
+          "number": "06",
+          "screenLabel": "L6 Skills",
+          "title": "Skills são <span class=\"marker-underline green\">cartões de receita</span> no bolso do agente",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "left",
+              "sticky": {
+                "color": "mint",
+                "tape": true,
+                "html": "Um chef não reaprende lasanha todo dia. Ele tem receita. Um agente bom também não deveria redescobrir login, checkout, build e deploy toda vez que acorda.",
+                "tilt": "right"
+              },
+              "html": "<p>Uma skill empacota instruções, scripts e materiais para uma tarefa recorrente. No dogfood loop, cada cenário pode ser uma skill: \"testar checkout\", \"explorar onboarding\", \"rodar login com navegador\". <span class=\"highlight\">A skill transforma conhecimento repetível em uma ferramenta nomeada.</span></p><p class=\"joke\">Sem skill, o agente é turista perguntando onde fica o banheiro em toda esquina. Com skill, ele pelo menos tem mapa. Ainda pode entrar na porta errada.</p>",
+              "placeholder": "metáfora: cartões de receita presos por argola, cada um com nome '/dogfood-checkout' ou '/dogfood-login'"
+            },
+            {
+              "type": "diagram",
+              "label": "SKILL DE CENÁRIO",
+              "html": "<div style='display:flex;flex-direction:column;gap:12px'><div style='display:flex;gap:14px;align-items:center'><span class='hand' style='font-size:22px;color:var(--marker-red);min-width:90px'>NOME →</span><code class='mono' style='background:#fff;padding:6px 12px;border:1.5px solid var(--ink);border-radius:4px'>/dogfood-checkout</code></div><div style='display:flex;gap:14px;align-items:center'><span class='hand' style='font-size:22px;color:var(--marker-red);min-width:90px'>QUANDO →</span><span class='hand' style='font-size:22px'>quando o loop escolher o cenário checkout</span></div><div style='display:flex;gap:14px;align-items:center'><span class='hand' style='font-size:22px;color:var(--marker-red);min-width:90px'>COMO →</span><span class='hand' style='font-size:22px'>abrir app, navegar, coletar evidências, listar findings</span></div></div>"
+            },
+            {
+              "type": "mockui",
+              "url": "repo/.claude/skills",
+              "height": 235,
+              "annotations": [
+                {
+                  "x": -170,
+                  "y": 64,
+                  "text": "↗ skills/commands detectadas"
+                },
+                {
+                  "x": "100%",
+                  "y": 145,
+                  "text": "↖ o loop escolhe uma por fire",
+                  "style": {
+                    "marginLeft": 12,
+                    "color": "var(--marker-blue)"
+                  }
+                }
+              ],
+              "html": "<div style='display:grid;grid-template-columns:repeat(2,1fr);gap:10px;font-family:Nunito'><div style='padding:12px;border:1.5px solid var(--rule);border-radius:6px;background:#fff'><div class='mono' style='font-size:12px;font-weight:700'>dogfood-login</div><div style='font-size:12px;color:var(--muted);margin-top:4px'>entra, autentica, checa erro</div></div><div style='padding:12px;border:1.5px solid var(--rule);border-radius:6px;background:#fff'><div class='mono' style='font-size:12px;font-weight:700'>dogfood-checkout</div><div style='font-size:12px;color:var(--muted);margin-top:4px'>carrinho até pagamento fake</div></div><div style='padding:12px;border:1.5px solid var(--rule);border-radius:6px;background:#fff'><div class='mono' style='font-size:12px;font-weight:700'>dogfood-onboarding</div><div style='font-size:12px;color:var(--muted);margin-top:4px'>primeira experiência</div></div><div style='padding:12px;border:1.5px dashed var(--ink);border-radius:6px;background:var(--paper-deep)'><div class='mono' style='font-size:12px;font-weight:700'>dogfood-explore</div><div style='font-size:12px;color:var(--muted);margin-top:4px'>genérica se nenhuma existir</div></div></div>"
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "SKILL VAGA",
+                "html": "<code class='mono'>\"testa o app\"</code>"
+              },
+              "good": {
+                "label": "SKILL ÚTIL",
+                "html": "<code class='mono'>\"Abra a URL alvo, complete o fluxo de signup, capture screenshot em cada falha e retorne findings com repro steps. Não faça fix dentro da skill.\"</code>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — skill, command e ferramenta não são a mesma coisa",
+              "html": "<p>Uma ferramenta é uma capacidade executável: Bash, navegador, leitura de arquivo, GitHub. Uma skill é uma receita que orienta o modelo a usar ferramentas de um jeito específico. Um command é uma forma de invocar uma receita pelo nome.</p><p>No loop, <span class=\"circle-it\">agent-browser</span> é a mão no navegador; a skill é o roteiro do passeio; o prompt do cron é o gerente que escolhe qual passeio fazer hoje.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "Por que rotacionar skills de cenário?",
+                  "answer": "Para não gastar todo fire no mesmo fluxo. A rotação dá cobertura: login, checkout, onboarding e outras áreas têm vez."
+                },
+                {
+                  "question": "O que acontece se nenhuma skill existir?",
+                  "answer": "O wizard pode criar uma exploradora genérica, mas isso é ponto de partida. Cenário específico sempre ensina melhor o agente."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "ai-l6-reflect",
+              "prompt": "Escreva o nome de três skills que seu projeto deveria ter. Uma delas seria genérica ou específica? Por quê?",
+              "hint": "ex.: /dogfood-login, /dogfood-billing, /verify-api-contract."
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "tag": "LESSON 07 · INTERMEDIATE",
+          "number": "07",
+          "screenLabel": "L7 State file",
+          "title": "State file é o <span class=\"marker-underline\">save game</span> do agente",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "right",
+              "sticky": {
+                "color": "lilac",
+                "tape": true,
+                "html": "No videogame, você passa de fase e salva. O console pode desligar. Seu personagem não volta para o tutorial, porque o progresso virou arquivo.",
+                "tilt": "tilt2"
+              },
+              "html": "<p>O state file é isso: a verdade escrita em disco. O agente lê no começo e escreve no final. <span class=\"highlight\">Processos morrem; arquivos sobrevivem.</span></p><p class=\"joke\">Sem state file, seu agente é aquele amigo que pergunta o mesmo endereço cinco vezes e ainda aparece na casa errada.</p>",
+              "placeholder": "metáfora: tela de videogame 'SAVE COMPLETE' com tabelas de cenários, issues e branches em pixel art"
+            },
+            {
+              "type": "diagram",
+              "label": "READ FIRST, WRITE LAST",
+              "layout": "flex-row",
+              "gap": 24,
+              "justify": "center",
+              "items": [
+                {
+                  "kind": "node",
+                  "color": "yellow",
+                  "label": "Cron fire",
+                  "caption": "acorda"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    5,
+                    30
+                  ],
+                  "to": [
+                    80,
+                    30
+                  ],
+                  "curve": -10,
+                  "width": 90,
+                  "height": 60,
+                  "label": "read"
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "State.md",
+                  "caption": "source of truth"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    5,
+                    30
+                  ],
+                  "to": [
+                    80,
+                    30
+                  ],
+                  "curve": 10,
+                  "width": 90,
+                  "height": 60,
+                  "label": "decide"
+                },
+                {
+                  "kind": "node",
+                  "color": "pink",
+                  "label": "Run",
+                  "caption": "cenário + ações"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    5,
+                    30
+                  ],
+                  "to": [
+                    100,
+                    30
+                  ],
+                  "curve": -12,
+                  "width": 110,
+                  "height": 60,
+                  "label": "write"
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "State.md",
+                  "caption": "atualizado"
+                }
+              ],
+              "caption": "se falhar no meio, o próximo fire ainda tem um mapa do que aconteceu antes."
+            },
+            {
+              "type": "mockui",
+              "url": "dogfood-output/loop-state.md",
+              "height": 320,
+              "annotations": [
+                {
+                  "x": -175,
+                  "y": 60,
+                  "text": "↗ status global"
+                },
+                {
+                  "x": "100%",
+                  "y": 142,
+                  "text": "↖ rotação por runs",
+                  "style": {
+                    "marginLeft": 12
+                  }
+                },
+                {
+                  "x": "100%",
+                  "y": 252,
+                  "text": "↖ log append-only",
+                  "style": {
+                    "marginLeft": 12,
+                    "color": "var(--marker-green)"
+                  }
+                }
+              ],
+              "html": "<pre class='mono' style='font-size:11px;line-height:1.42;margin:0;white-space:pre-wrap'># Dogfood Loop State\nLoop Status: ACTIVE\nHard stop: 2026-05-26 19:57\n\n| Scenario | Runs | Status | Last findings |\n| /dogfood-login | 1 | active | auto=1 ui=0 |\n| /dogfood-checkout | 0 | active | - |\n\n## Branches opened by loop\n- fix/dogfood-login-email-validation\n\n## Issues opened by loop\n- #123 hidden CTA on mobile\n\n## Run log\n2026-05-25 20:07 | /dogfood-login | findings=2 | fixes=1 | issues=1 | status=ok</pre>"
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "MEMÓRIA IMPLÍCITA",
+                "html": "<p>\"O modelo vai lembrar que já abriu issue para isso.\"</p>"
+              },
+              "good": {
+                "label": "ESTADO EXPLÍCITO",
+                "html": "<p>\"A issue #123 está registrada no state file; se o bug reaparecer, o agente consegue ver que não é novidade.\"</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — por que Markdown?",
+              "html": "<p>Markdown é legível por humano e por LLM. JSON é ótimo para máquina rígida; Markdown é ótimo para uma mistura de tabelas, notas e logs que você pode editar na mão.</p><p>O ponto não é o formato ser sagrado. O ponto é existir <span class=\"circle-it\">estado externo persistente</span>. Pode ser Markdown, JSON, SQLite ou um banco. Para esse loop, Markdown é barato e suficiente.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "Por que o state file deve ser escrito no final?",
+                  "answer": "Porque você quer registrar o resultado do que realmente aconteceu, não a intenção. Primeiro observa, depois salva o novo estado."
+                },
+                {
+                  "question": "Qual é o risco de dois agentes escreverem o mesmo state file ao mesmo tempo?",
+                  "answer": "Corrida de escrita: um sobrescreve o progresso do outro. Aí você precisa lock, fila, branch separada ou um banco com controle de concorrência."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "ai-l7-reflect",
+              "prompt": "Desenhe mentalmente o state file da sua automação. Quais campos impediriam o agente de repetir trabalho?",
+              "hint": "pense em IDs já processados, último timestamp, tentativas, status, links de evidência."
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "tag": "LESSON 08 · INTERMEDIATE",
+          "number": "08",
+          "screenLabel": "L8 Cron",
+          "title": "Cron é o <span class=\"marker-underline blue\">despertador</span> que cutuca o agente",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "left",
+              "sticky": {
+                "color": "sky",
+                "tape": true,
+                "html": "Você não acorda às 3h para perguntar se o deploy terminou. Você põe despertador. Software faz a mesma coisa, só que com expressões tipo senha de Wi‑Fi triste.",
+                "tilt": "right"
+              },
+              "html": "<p>Cron agenda prompts. No gist, a cada hora ele dispara a cápsula do dogfood loop. <span class=\"highlight\">Tempo vira gatilho.</span> O agente não espera você mandar mensagem; ele acorda, lê o state file e roda o próximo cenário.</p><p class=\"joke\">Cron é velho, feio e onipresente. Igual fita isolante em infraestrutura.</p>",
+              "placeholder": "metáfora: um despertador com sinos tocando, mostrando '7 * * * *', cutucando um robô sonolento"
+            },
+            {
+              "type": "diagram",
+              "label": "ANATOMIA DO CRON",
+              "html": "<pre class='mono' style='font-size:26px;font-weight:700;text-align:center;margin:0'>7  *  *  *  *</pre><div style='display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:18px;text-align:center'><div><div class='mono' style='font-weight:700;color:var(--marker-red)'>↑</div><div class='hand' style='font-size:20px'>minuto</div></div><div><div class='mono' style='font-weight:700;color:var(--marker-red)'>↑</div><div class='hand' style='font-size:20px'>hora</div></div><div><div class='mono' style='font-weight:700;color:var(--marker-red)'>↑</div><div class='hand' style='font-size:20px'>dia</div></div><div><div class='mono' style='font-weight:700;color:var(--marker-red)'>↑</div><div class='hand' style='font-size:20px'>mês</div></div><div><div class='mono' style='font-weight:700;color:var(--marker-red)'>↑</div><div class='hand' style='font-size:20px'>semana</div></div></div><p class='hand' style='font-size:22px;text-align:center;margin-bottom:0'>tradução: todo horário, no minuto 7.</p>"
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "LOOP NA CONVERSA",
+                "html": "<p>\"Continue trabalhando para sempre até terminar.\"</p><p style='color:var(--muted)'>Parece simples. Também parece uma torneira aberta.</p>"
+              },
+              "good": {
+                "label": "CRON COM TIMEBOX",
+                "html": "<p>\"Acorde a cada hora, rode um cenário, registre uma linha, pare se bater o hard stop.\"</p><p style='color:var(--muted)'>Menos drama. Mais controle.</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — session-scoped não é imortal",
+              "html": "<p>Em Claude Code, tarefas agendadas de sessão vivem dentro da conversa. Se a sessão fecha, elas param de disparar; retomar com resume pode restaurar tarefas não expiradas. Para automação que não depende da sua máquina ou sessão, existem rotinas em infraestrutura gerenciada, GitHub Actions ou agendadores externos.</p><p>Essa nuance importa: o gist aposta em <span class=\"circle-it\">state durável + agenda de sessão</span>. O estado persiste; o despertador pode precisar ser rearmado.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "Por que rodar uma vez por hora e não sem parar?",
+                  "answer": "Porque intervalo reduz consumo, dá tempo de revisar, limita blast radius e impede que um erro vire uma metralhadora de commits."
+                },
+                {
+                  "question": "O que significa \"no catch-up\" em agendamento?",
+                  "answer": "Se o agente perdeu três horários enquanto estava ocupado, você não quer necessariamente três execuções em cascata. Um fire controlado já é suficiente."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "ai-l8-reflect",
+              "prompt": "Qual cadência faria sentido para um agente seu: minuto, hora, noite ou semana? O que aconteceria se rodasse rápido demais?",
+              "hint": "pense em custo, contexto, estado externo, risco e valor de encontrar problema cedo."
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "tag": "LESSON 09 · INTERMEDIATE",
+          "number": "09",
+          "screenLabel": "L9 Wizard",
+          "title": "O wizard é um <span class=\"marker-underline green\">check-in de aeroporto</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "right",
+              "sticky": {
+                "color": "pink",
+                "tape": true,
+                "html": "Antes de voar, você passa por check-in, documento, bagagem, portão e aquele olhar existencial para a balança. Ninguém quer descobrir no céu que esqueceu combustível.",
+                "tilt": "tilt3"
+              },
+              "html": "<p>O gist começa com um wizard: descobre repo, branch, package manager, scripts, skills e agent-browser. Depois faz perguntas com defaults e roda pre-flight checks. <span class=\"highlight\">Setup bom remove perguntas bobas e encontra problemas cedo.</span></p><p class=\"joke\">Agente que pergunta \"você usa npm?\" enquanto olha para um <code>pnpm-lock.yaml</code> merece sentar no fundão.</p>",
+              "placeholder": "metáfora: balcão de aeroporto com malas etiquetadas 'repo', 'branch', 'skills', 'agent-browser' e um robô conferindo passaporte"
+            },
+            {
+              "type": "diagram",
+              "label": "DO PASTE-AND-GO AO CRON ARMADO",
+              "layout": "flex-column",
+              "gap": 10,
+              "items": [
+                {
+                  "kind": "node",
+                  "color": "yellow",
+                  "label": "1. Discovery",
+                  "caption": "olha o ambiente"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    50,
+                    0
+                  ],
+                  "to": [
+                    50,
+                    42
+                  ],
+                  "curve": 0,
+                  "width": 70,
+                  "height": 42
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "2. Perguntas Q1–Q7",
+                  "caption": "defaults detectados"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    50,
+                    0
+                  ],
+                  "to": [
+                    50,
+                    42
+                  ],
+                  "curve": 0,
+                  "width": 70,
+                  "height": 42
+                },
+                {
+                  "kind": "node",
+                  "color": "pink",
+                  "label": "3. Pre-flight",
+                  "caption": "URL, branch, label, dirty tree"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    50,
+                    0
+                  ],
+                  "to": [
+                    50,
+                    42
+                  ],
+                  "curve": 0,
+                  "width": 70,
+                  "height": 42
+                },
+                {
+                  "kind": "node",
+                  "color": "sky",
+                  "label": "4. Render prompt + dry-fire",
+                  "caption": "valida antes de soltar"
+                }
+              ],
+              "caption": "o wizard não é perfumaria; é a diferença entre automação e acidente agendado."
+            },
+            {
+              "type": "mockui",
+              "url": "wizard.local/setup",
+              "height": 290,
+              "annotations": [
+                {
+                  "x": -170,
+                  "y": 52,
+                  "text": "↗ detected default"
+                },
+                {
+                  "x": "100%",
+                  "y": 138,
+                  "text": "↖ escolhas humanas só onde importa",
+                  "style": {
+                    "marginLeft": 12
+                  }
+                },
+                {
+                  "x": "100%",
+                  "y": 230,
+                  "text": "↖ dry-fire antes do voo",
+                  "style": {
+                    "marginLeft": 12,
+                    "color": "var(--marker-green)"
+                  }
+                }
+              ],
+              "html": "<div style='font-family:Nunito;display:flex;flex-direction:column;gap:9px'><div style='padding:10px;background:var(--sticky-yellow);border-radius:8px'><b>Q2 Trunk:</b> main <span class='mono' style='font-size:11px'>(Detected)</span></div><div style='padding:10px;background:var(--sticky-mint);border-radius:8px'><b>Q3 Scenarios:</b> /dogfood-login, /dogfood-checkout</div><div style='padding:10px;background:var(--sticky-pink);border-radius:8px'><b>Q5 Checks:</b> pnpm lint && pnpm test && pnpm build</div><div style='padding:10px;background:#f0eee5;border-radius:8px'><span class='mono' style='font-size:11px'>pre-flight: branch ok · url 200 · label exists · tree clean</span></div></div>"
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "SETUP PREGUIÇOSO",
+                "html": "<p>\"Cole esse prompt enorme e torça para estar no repo certo.\"</p>"
+              },
+              "good": {
+                "label": "SETUP COM WIZARD",
+                "html": "<p>\"Descubra o ambiente, pergunte só o necessário, valide pré-condições, mostre o prompt renderizado e só então arme o cron.\"</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — discovery em paralelo",
+              "html": "<p>O STEP 1 roda várias checagens em paralelo: git root, remote, branch, lockfiles, scripts, skills existentes e agent-browser. Isso é introspecção de ambiente: o agente usa o filesystem como fonte, não sua paciência.</p><p>Pre-flight é fail-fast: se branch trunk não existe, URL não responde ou a árvore está suja, melhor parar agora do que acordar com 24 horas de lixo automatizado.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "Por que defaults detectados são tão importantes?",
+                  "answer": "Porque diminuem atrito sem tirar controle. O usuário aperta Enter quando a detecção está certa e só pensa nos casos especiais."
+                },
+                {
+                  "question": "Qual é o objetivo do dry-fire?",
+                  "answer": "Executar um disparo manual antes da automação recorrente. É o ensaio geral antes de deixar o robô sozinho."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "ai-l9-reflect",
+              "prompt": "Que pre-flight check impediria sua automação de fazer besteira?",
+              "hint": "ex.: árvore git limpa, ambiente staging, token correto, backup, limite de escopo, branch proibida."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advanced",
+      "label": "ADVANCED",
+      "topics": "Decision Trees · TDD · Bounded Autonomy · L4 Gaps",
+      "intro": "— aqui mora o cinto de segurança. agente útil sem cerca vira cabra dentro de loja de porcelana.",
+      "lessons": [
+        {
+          "id": 10,
+          "tag": "LESSON 10 · ADVANCED",
+          "number": "10",
+          "screenLabel": "L10 Triage",
+          "title": "Decision tree é o <span class=\"marker-underline\">segurança da balada</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "left",
+              "sticky": {
+                "color": "yellow",
+                "tape": true,
+                "html": "Na porta da balada, o segurança não debate filosofia. Tem lista, critério e ordem. Pulseira certa entra. Documento duvidoso fica do lado de fora. Simples, chato, necessário.",
+                "tilt": "right"
+              },
+              "html": "<p>O loop classifica cada finding com critérios estritos: backend_fix, tracking_fix, ui_issue, needs_product. A primeira categoria que bate vence; na dúvida, cai para a opção segura. <span class=\"highlight\">Classificação decide se o agente pode mexer no código ou só abrir issue.</span></p><p class=\"joke\">Toda automação perigosa precisa de um adulto entediado dizendo \"não\". Aqui, esse adulto é a decision tree.</p>",
+              "placeholder": "metáfora: segurança de balada com prancheta, carimbos 'auto-fix' e 'issue only', segurando um robô apressado"
+            },
+            {
+              "type": "diagram",
+              "label": "ROTEAMENTO DO FINDING",
+              "layout": "flex-column",
+              "gap": 10,
+              "items": [
+                {
+                  "kind": "node",
+                  "color": "yellow",
+                  "label": "Finding",
+                  "caption": "algo estranho no app"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    50,
+                    0
+                  ],
+                  "to": [
+                    50,
+                    38
+                  ],
+                  "curve": 0,
+                  "width": 70,
+                  "height": 38,
+                  "label": "critério 1"
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "backend_fix?",
+                  "caption": "erro claro no código"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    50,
+                    0
+                  ],
+                  "to": [
+                    50,
+                    38
+                  ],
+                  "curve": 0,
+                  "width": 70,
+                  "height": 38,
+                  "label": "senão"
+                },
+                {
+                  "kind": "node",
+                  "color": "sky",
+                  "label": "tracking_fix?",
+                  "caption": "analytics claro"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    50,
+                    0
+                  ],
+                  "to": [
+                    50,
+                    38
+                  ],
+                  "curve": 0,
+                  "width": 70,
+                  "height": 38,
+                  "label": "senão"
+                },
+                {
+                  "kind": "node",
+                  "color": "pink",
+                  "label": "issue only",
+                  "caption": "ui_issue ou needs_product"
+                }
+              ],
+              "caption": "o default conservador é feature, não bug."
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "AGENTE OTIMISTA",
+                "html": "<p>\"Parece bug. Vou consertar tudo que eu acho estranho.\"</p>"
+              },
+              "good": {
+                "label": "AGENTE CONSERVADOR",
+                "html": "<p>\"Só faço auto-fix quando o critério é explícito. Se produto ou design precisam decidir, abro issue com evidência.\"</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — reversible beats brave",
+              "html": "<p>Fail-safe default significa escolher a ação menos destrutiva quando há incerteza. Abrir issue indevida é fácil de desfazer. Commit ruim pode roubar uma tarde.</p><p>Por isso o prompt repete: quando em dúvida, issue; não commit. Repetição aqui não é escrita ruim. É <span class=\"circle-it\">guardrail</span>.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "Por que a ordem da decision tree importa?",
+                  "answer": "Porque a primeira categoria que casa vence. Categorias de auto-fix precisam ser mais restritas e vir antes das categorias conservadoras."
+                },
+                {
+                  "question": "O que é fall-through?",
+                  "answer": "Quando um finding não satisfaz um critério com clareza, ele cai para o próximo. Se nada for claro, cai no default seguro."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "ai-l10-reflect",
+              "prompt": "Na sua automação, quais achados poderiam ser auto-fix e quais deveriam virar issue?",
+              "hint": "escreva critérios observáveis, não vibes: erro 500, teste falhando, texto truncado, dúvida de produto..."
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "tag": "LESSON 11 · ADVANCED",
+          "number": "11",
+          "screenLabel": "L11 Fix safety",
+          "title": "TDD é o <span class=\"marker-underline blue\">detector de fumaça</span> do fix",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "right",
+              "sticky": {
+                "color": "mint",
+                "tape": true,
+                "html": "Você não pergunta para o incêndio se ele acabou. Você olha o detector de fumaça. Para bug, o detector é um teste que falha antes e passa depois.",
+                "tilt": "tilt2"
+              },
+              "html": "<p>Quando o loop faz auto-fix, ele deve escrever primeiro um teste de regressão que falha. Depois muda o código, roda checks e revisa o diff. <span class=\"highlight\">O teste vira um sensor externo para o agente não acreditar só na própria história.</span></p><p class=\"joke\">Sem teste, o agente fala \"arrumei\" com a mesma energia de criança que empurrou a bagunça para debaixo da cama.</p>",
+              "placeholder": "metáfora: detector de fumaça apitando vermelho, ao lado de um teste 'RED' virando 'GREEN'"
+            },
+            {
+              "type": "diagram",
+              "label": "RED → GREEN → REVIEW",
+              "layout": "flex-row",
+              "gap": 24,
+              "justify": "center",
+              "items": [
+                {
+                  "kind": "node",
+                  "color": "pink",
+                  "label": "Red",
+                  "caption": "teste falha"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    5,
+                    30
+                  ],
+                  "to": [
+                    80,
+                    30
+                  ],
+                  "curve": -10,
+                  "width": 90,
+                  "height": 60
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "Green",
+                  "caption": "fix passa"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    5,
+                    30
+                  ],
+                  "to": [
+                    80,
+                    30
+                  ],
+                  "curve": 10,
+                  "width": 90,
+                  "height": 60
+                },
+                {
+                  "kind": "node",
+                  "color": "yellow",
+                  "label": "Review",
+                  "caption": "diff mínimo"
+                },
+                {
+                  "kind": "arrow",
+                  "from": [
+                    5,
+                    30
+                  ],
+                  "to": [
+                    80,
+                    30
+                  ],
+                  "curve": -10,
+                  "width": 90,
+                  "height": 60
+                },
+                {
+                  "kind": "node",
+                  "color": "sky",
+                  "label": "Branch local",
+                  "caption": "sem push"
+                }
+              ],
+              "caption": "o teste não prova tudo, mas impede muito teatro."
+            },
+            {
+              "type": "mockui",
+              "url": "repo/fix/dogfood-login-email",
+              "height": 300,
+              "annotations": [
+                {
+                  "x": -170,
+                  "y": 60,
+                  "text": "↗ branch isolada"
+                },
+                {
+                  "x": "100%",
+                  "y": 142,
+                  "text": "↖ check objetivo",
+                  "style": {
+                    "marginLeft": 12,
+                    "color": "var(--marker-green)"
+                  }
+                },
+                {
+                  "x": "100%",
+                  "y": 238,
+                  "text": "↖ humano revisa antes de integrar",
+                  "style": {
+                    "marginLeft": 12
+                  }
+                }
+              ],
+              "html": "<pre class='mono' style='font-size:11px;line-height:1.45;margin:0;white-space:pre-wrap'>$ git checkout -b fix/dogfood-login-email\n$ pnpm test auth-email.spec.ts\n✗ rejects invalid email   # red\n\n# edit minimal code\n$ pnpm test auth-email.spec.ts\n✓ rejects invalid email   # green\n$ pnpm lint && pnpm build\n✓ ok\n\n# local branch only — no push</pre>"
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "RISKY",
+                "html": "<p>\"Mudei o código, parece certo, vou commitar na main.\"</p>"
+              },
+              "good": {
+                "label": "QUARENTENA",
+                "html": "<p>\"Criei branch local, escrevi regressão, passei checks e deixei para revisão humana.\"</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — human-in-the-loop sem discurso bonito",
+              "html": "<p>Branch isolada é quarentena. O agente pode produzir trabalho, mas não decide sozinho que esse trabalho entra no trunk. Essa fronteira é um checkpoint humano.</p><p>O prompt ainda inclui micro-review: ler o próprio diff, checar se ficou debug sobrando, confirmar mudança mínima e abandonar se algo cheira mal. Isso é self-critique; útil, mas não substitui revisão externa.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "Por que teste de regressão vem antes do fix?",
+                  "answer": "Para provar que o teste captura o bug. Se ele não falha antes, talvez não esteja testando o problema real."
+                },
+                {
+                  "question": "Por que \"never push\" é uma trava forte?",
+                  "answer": "Porque push move o problema para fora da área local. Local branch é laboratório; remoto já começa a virar processo de time."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "ai-l11-reflect",
+              "prompt": "Qual seria um bom teste de regressão para um bug que você viu recentemente?",
+              "hint": "formule como comportamento observável: dado X, quando Y, então Z."
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "tag": "LESSON 12 · ADVANCED",
+          "number": "12",
+          "screenLabel": "L12 L4 Loop",
+          "title": "L4 autonomy é um <span class=\"marker-underline green\">carro autônomo com adulto no banco</span>",
+          "blocks": [
+            {
+              "type": "metaphor",
+              "imageSide": "left",
+              "sticky": {
+                "color": "lilac",
+                "tape": true,
+                "html": "O carro dirige em uma estrada cercada, com limite de velocidade, rota definida, botão de emergência e alguém olhando. Isso é bem diferente de \"vai para qualquer lugar e me manda cartão-postal\".",
+                "tilt": "right"
+              },
+              "html": "<p>O dogfood loop é autonomia cercada: hard caps, kill criteria, run log, rotação de cenários, state file e revisão humana. <span class=\"highlight\">Ele trabalha sozinho por um intervalo, mas não recebe soberania.</span></p><p class=\"joke\">Agente sem limite é como Roomba com cartão corporativo. Pode até limpar, mas você vai querer conferir a fatura.</p>",
+              "placeholder": "metáfora: carro autônomo em pista cercada, com cones 'max 3 fixes', 'hard stop', 'no push' e adulto com botão vermelho"
+            },
+            {
+              "type": "diagram",
+              "label": "A CERCA DA AUTONOMIA",
+              "layout": "grid",
+              "gridTemplateColumns": "repeat(3, 1fr)",
+              "items": [
+                {
+                  "kind": "node",
+                  "color": "yellow",
+                  "label": "Hard caps",
+                  "caption": "3 fixes, 50 LOC"
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "Kill criteria",
+                  "caption": "quando parar"
+                },
+                {
+                  "kind": "node",
+                  "color": "pink",
+                  "label": "Run log",
+                  "caption": "auditoria"
+                },
+                {
+                  "kind": "node",
+                  "color": "sky",
+                  "label": "Scenario rotation",
+                  "caption": "cobertura"
+                },
+                {
+                  "kind": "node",
+                  "color": "yellow",
+                  "label": "State file",
+                  "caption": "continuidade"
+                },
+                {
+                  "kind": "node",
+                  "color": "mint",
+                  "label": "No push",
+                  "caption": "quarentena"
+                }
+              ],
+              "caption": "cada cerca reduz o dano máximo de uma decisão ruim."
+            },
+            {
+              "type": "mockui",
+              "url": "dogfood-output/run-log",
+              "height": 320,
+              "annotations": [
+                {
+                  "x": -175,
+                  "y": 48,
+                  "text": "↗ append-only"
+                },
+                {
+                  "x": "100%",
+                  "y": 126,
+                  "text": "↖ fácil auditar",
+                  "style": {
+                    "marginLeft": 12
+                  }
+                },
+                {
+                  "x": "100%",
+                  "y": 245,
+                  "text": "↖ status final claro",
+                  "style": {
+                    "marginLeft": 12,
+                    "color": "var(--marker-red)"
+                  }
+                }
+              ],
+              "html": "<pre class='mono' style='font-size:11px;line-height:1.45;margin:0;white-space:pre-wrap'>2026-05-25 20:07 | /dogfood-login | findings=2 (auto=1, ui=1, prod=0) | fixes=1 | issues=1 | duration=11min | status=ok\n2026-05-25 21:07 | /dogfood-checkout | findings=0 (auto=0, ui=0, prod=0) | fixes=0 | issues=0 | duration=8min | status=ok\n2026-05-25 22:07 | /dogfood-login | findings=0 (auto=0, ui=0, prod=0) | fixes=0 | issues=0 | duration=7min | status=parked\n\n[LOOP] scenario=/dogfood-login runs=2 auto_fixable=0 fixes=0 issues=0 loop_status=ACTIVE</pre>"
+            },
+            {
+              "type": "contrast",
+              "bad": {
+                "label": "L5 FANTASIA",
+                "html": "<p>\"Deixa o agente rodar até resolver tudo e fazer merge sozinho.\"</p>"
+              },
+              "good": {
+                "label": "L4 HONESTO",
+                "html": "<p>\"Deixa o agente trabalhar dentro de limites, produzir branches/issues/evidências e parar quando os critérios baterem. Humano decide integração.\"</p>"
+              }
+            },
+            {
+              "type": "collapsible",
+              "title": "Under the hood — os três buracos que você deve falar em voz alta",
+              "html": "<p>Primeiro: sem sensor externo perfeito para fixes; o agente ainda julga parte do próprio diff. Segundo: sem baseline aprovado para classificação, a decision tree pode errar. Terceiro: contexto cresce com cada fire, então sessões longas degradam e consomem plano rápido.</p><p>Falar esses gaps não enfraquece a técnica. Fortalece. <span class=\"circle-it\">Honest capability disclosure</span> é o que separa engenharia de demo hipnotizada.</p>"
+            },
+            {
+              "type": "flipcards",
+              "items": [
+                {
+                  "question": "O que são kill criteria?",
+                  "answer": "Condições explícitas para parar: hard stop atingido, cenários estacionados, runs sem achados, token/context limit, árvore suja, app inacessível."
+                },
+                {
+                  "question": "Por que run log append-only importa?",
+                  "answer": "Porque auditoria exige histórico. Se o agente fez besteira na hora 7, você precisa achar a hora 7, não ouvir \"foi mal, vibes\"."
+                }
+              ]
+            },
+            {
+              "type": "reflection",
+              "id": "ai-l12-reflect",
+              "prompt": "Qual limite você colocaria antes de deixar um agente trabalhar por 24h no seu projeto?",
+              "hint": "ex.: custo máximo, tempo máximo, branch pattern, número de issues, LOC por fix, escopo de arquivos."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "outro": {
+    "title": "Esse é o campo de batalha.",
+    "subtitle": "Agora você consegue olhar para um gist de agente autônomo e enxergar as peças: modelo, ferramenta, prompt, estado, agenda, sensores, travas e revisão humana.",
+    "stickies": [
+      {
+        "color": "lilac",
+        "tilt": "tilt2",
+        "tape": true,
+        "html": "✎ Fórmula que vale guardar:<br/><br/><b>agente útil = LLM + ferramentas + estado + loop + critério de parada.</b><br/><br/>Sem critério de parada, é só ansiedade automatizada."
+      },
+      {
+        "color": "sky",
+        "tilt": "tilt3",
+        "tape": true,
+        "html": "✎ Para explicar para alguém:<br/><br/>\"O gist não é magia. É um setup wizard que monta um trabalhador L4: roda cenário, salva estado, classifica achados, conserta só o óbvio e deixa o resto para humano.\""
+      },
+      {
+        "color": "yellow",
+        "tilt": "right",
+        "tape": true,
+        "html": "✎ Próximo experimento:<br/><br/>escreva uma skill pequena para um único fluxo. Rode manualmente. Só depois pense em cron. Primeiro coleira, depois quintal."
+      }
+    ],
+    "stamp": "VOL.<br/>01<br/>DONE"
+  }
+}

@@ -342,6 +342,31 @@ lesson should hit at least one block from each of these three categories:
 
 If a lesson has only a metaphor and a reflection, it's a stub — not done.
 
+### 4.13 Beyond the basics — visual components for specific techniques
+
+The block library has a second tier of richer visual components. Each one
+exists because it carries a specific technique better than a plain block can.
+Reach for them when the basic block would be too generic.
+
+| Component                       | Technique it serves                              | Use when…                                              |
+|---------------------------------|--------------------------------------------------|--------------------------------------------------------|
+| `polaroid` (or `metaphor.polaroid`) | Visual learning (§4.1) — concrete > abstract     | the metaphor needs to feel like an *actual photo*      |
+| `phone`                         | Visual learning + practical app (§4.1, §4.10)    | the example is a chat / mobile interaction             |
+| `terminal`                      | Visual learning + practical app (§4.1, §4.10)    | the example is CLI output, cron, logs                  |
+| `foldcard`                      | Cognitive load (§4.7) — sidebar fact, not lesson | dropping a quick fact, tip, or warning inline          |
+| `pullquote`                     | Repetition + emotion (§4.4, §4.6)                | a sentence is good enough to land twice                |
+| `bigstamp`                      | Emotion + reward (§4.6)                          | the lesson ends and you want the reader to feel it     |
+| `checklist`                     | Active learning (§4.3) — do-something            | turning advice into a checkable list the reader keeps  |
+| `margindoodle`                  | Emotion (§4.6) — a margin scribble               | a side comment the author wanted to add later          |
+| `dragmatch`                     | Active learning + repetition (§4.3, §4.4)        | the concept has clean term/definition pairs            |
+| `animated-arrow` (diagram item) | Visual learning (§4.1) — motion = attention      | an important flow you want the eye to actually follow  |
+| `class="highlight-anim"` (inline) | Visual learning + emphasis (§4.1)              | one phrase per lesson you want to land like a punch    |
+
+Rule of thumb: **one richer component per lesson, not five.** They're seasoning.
+A lesson that opens with a polaroid, contains a phone, ends with a bigstamp,
+sprinkles three margindoodles, and includes a dragmatch is showing off —
+not teaching.
+
 ---
 
 ## 5. Block types — the lesson body
@@ -369,6 +394,20 @@ renderer dispatches on `type` (see [src/components/Block.js](src/components/Bloc
 - `placeholder`: the text that appears inside the dashed-hatched image box.
   This is intentional — the placeholders read like art-direction notes.
 - `image` (optional): instead of a placeholder, you can pass an image URL.
+- `polaroid` (optional): set to `true` (or an object of polaroid options) to
+  render the image side as a Polaroid — masking-tape photo frame with the
+  `placeholder` text as the handwritten caption. See §5.10 for full options.
+
+```json
+{
+  "type": "metaphor",
+  "imageSide": "right",
+  "sticky": { "color": "yellow", "html": "…" },
+  "html": "<p>…</p>",
+  "placeholder": "the parrot, mid-squawk",
+  "polaroid": true
+}
+```
 
 ### 5.2 `diagram` — labeled box with nodes + arrows
 
@@ -398,6 +437,9 @@ Two ways to author a diagram. Use whichever fits.
 - `items` is a list of:
   - `{ kind: "node", color, label, caption? }` — color: `yellow | pink | mint | sky | dark` or omit for plain white.
   - `{ kind: "arrow", from?, to?, curve?, width?, height?, color?, label?, dashed? }`
+  - `{ kind: "animated-arrow", … }` — same fields as `arrow`, but fades in
+    when scrolled into view. Use for "the one important flow" — don't animate
+    every arrow on the page.
   - `{ kind: "text", html, className?, style? }` — for inline hand-written labels.
   - `{ kind: "html", html }` — for one-off custom markup.
 - `caption` is a hand-written line under the diagram body.
@@ -504,24 +546,231 @@ side-by-side layout.
 
 Use sparingly. Prefer the structured blocks above.
 
+### 5.10 `polaroid` — masking-tape photo frame with handwritten caption
+
+```json
+{
+  "type": "polaroid",
+  "label": "photo: chef, mid-chop",
+  "caption": "the chef's mise en place",
+  "tilt": "right",
+  "tape": true,
+  "width": 320
+}
+```
+
+- `label`: the placeholder text shown inside the photo area (an
+  art-direction note — same convention as `metaphor.placeholder`).
+- `caption`: the handwritten line under the photo. Keep it short.
+- `tilt`: `""` (default, slight CCW), `"right"`, or `"flat"`.
+- `tape`: `true` (default) adds a strip of washi tape at the top.
+- `width`: photo width in px. Default `320`.
+
+**When to use:** standalone, when the picture *is* the point — a portrait,
+an artifact, an "exhibit A." For a metaphor's image-side polaroid, prefer
+adding `"polaroid": true` to a `metaphor` block (§5.1).
+
+### 5.11 `phone` — mobile chat mockup
+
+```json
+{
+  "type": "phone",
+  "headerName": "Haiku Bot",
+  "messages": [
+    { "from": "you",  "text": "Write me a haiku about Mondays." },
+    { "typing": true },
+    { "from": "them", "text": "Alarm clock screams\nCoffee's not strong enough yet —\nMug judges my soul." }
+  ]
+}
+```
+
+- `headerName`: name shown at the top of the chat. First letter becomes
+  the avatar.
+- `messages`: array of `{ from: "you" | "them", text }` or `{ typing: true }`.
+  Use `text` containing `\n` for line breaks.
+
+**When to use:** chatbot lessons (this is the L2 example), any "user says X,
+app says Y" interaction. More memorable than a generic `mockui`.
+
+### 5.12 `terminal` — dark terminal window with traffic lights & blinking cursor
+
+```json
+{
+  "type": "terminal",
+  "title": "~/agent/cron.log — live",
+  "lines": [
+    { "type": "cmd", "text": "crontab -l" },
+    { "type": "log", "ts": "07:00:01", "text": "morning-brief: queued", "ok": false },
+    { "type": "log", "ts": "07:00:09", "text": "morning-brief: OK (8s)", "ok": true },
+    { "type": "out", "text": "(waiting for next tick…)" }
+  ]
+}
+```
+
+- `title`: text in the title bar.
+- `lines`: each line is one of:
+  - `{ type: "cmd", text }` — green `$ ` prompt + command in white.
+  - `{ type: "log", ts?, text, ok? }` — optional timestamp; `ok: true`
+    colors the line green, otherwise muted.
+  - `{ type: "out", text }` — plain output.
+
+**When to use:** cron, build output, log streams. Pairs well with
+`class="mono"` text elsewhere in the lesson.
+
+### 5.13 `foldcard` — paper card with a folded top-right corner
+
+```json
+{
+  "type": "foldcard",
+  "label": "QUICK FACT",
+  "html": "<p>The first cron daemon shipped in <b>1975</b>. The syntax hasn't really changed since.</p>"
+}
+```
+
+- `label`: small uppercase tag at the top.
+- `html`: card body.
+
+**When to use:** a one-paragraph aside that's too important to bury inside a
+`collapsible` but too small to deserve its own section. Sidebar facts,
+"pro tips," "watch out for…" notes.
+
+### 5.14 `pullquote` — oversized handwritten quote with a serif quotation mark
+
+```json
+{
+  "type": "pullquote",
+  "html": "It's not magic. It's <span class=\"highlight-anim pink\">linear algebra at scale</span>, and it's still very impressive.",
+  "by": "every honest AI researcher, eventually"
+}
+```
+
+- `html`: the quote body (inline HTML supported).
+- `by` (optional): attribution line.
+
+**When to use:** when a sentence from the lesson is good enough to slow the
+reader down and let it land. Don't overuse — one per lesson, two for the
+whole topic.
+
+### 5.15 `bigstamp` — circular stamp seal that pops in on scroll
+
+```json
+{
+  "type": "bigstamp",
+  "text": "GOT IT!",
+  "color": "green",
+  "align": "center"
+}
+```
+
+- `text`: 1–3 short words. Renders uppercase.
+- `color`: `""` (red, default) or `"green"`.
+- `align`: text alignment of the wrapper — `"center"` (default), `"left"`,
+  `"right"`.
+
+**When to use:** the *end* of a lesson, a level, or the whole topic. A
+reward. Don't put one halfway through.
+
+### 5.16 `checklist` — hand-drawn checkboxes that strikethrough on click
+
+```json
+{
+  "type": "checklist",
+  "id": "l4-skills",
+  "items": [
+    "pick a real task you do weekly",
+    "write the 'when to use it' hint first, code second",
+    "test with a wrong prompt — does the agent still pick it?"
+  ]
+}
+```
+
+- `id`: localStorage key. Use `<topic>-<lesson>-<purpose>` to avoid collisions.
+- `items`: array of strings. Each line renders as a checkbox + handwritten text.
+
+The reader's ticks persist across reloads.
+
+**When to use:** turning a lesson's advice into something the reader can
+*do* later. Works especially well wrapped in a `foldcard` labeled
+`"YOUR TURN — TICK THE SKILLS YOU'D ADD"`.
+
+### 5.17 `margindoodle` — a sketched note that pops in from the left margin
+
+```json
+{
+  "type": "margindoodle",
+  "top": 40,
+  "html": "← reread this part later"
+}
+```
+
+- `top`: vertical offset from the parent's top, in px.
+- `html`: very short text. Long content gets clipped.
+
+**When to use:** a tiny annotation that should feel like the author added it
+in pen after the lesson was written. Doesn't render on screens narrower
+than 1100px — by design.
+
+### 5.18 `dragmatch` — click-to-pair matching exercise
+
+```json
+{
+  "type": "dragmatch",
+  "title": "MATCH THE TERMS",
+  "pairs": [
+    { "left": "chatbot", "right": "one turn in, one turn out" },
+    { "left": "agent",   "right": "decides what to do, then does it" },
+    { "left": "skill",   "right": "a named ability the agent can call" },
+    { "left": "cron",    "right": "an alarm clock for software" }
+  ]
+}
+```
+
+- `title`: small uppercase prompt above the exercise.
+- `pairs`: array of `{ left, right }`. The right column is auto-shuffled.
+  Click a left term, then click its definition on the right. Wrong matches
+  shake; correct matches snap green and draw a dashed connector.
+
+**When to use:** the lesson is dense with named concepts (skills, cron
+fields, agent terminology). Use *after* the concepts have been introduced,
+as a recall check.
+
 ---
 
 ## 6. Inline markup cheat sheet
 
 These CSS classes are baked into the design. Use them inside any `html` field.
 
-| Class                          | Effect |
-|--------------------------------|--------|
-| `class="marker-underline"`     | red squiggly marker line under a word |
-| `class="marker-underline blue"` | same, in blue |
-| `class="marker-underline green"` | same, in green |
-| `class="highlight"`            | yellow highlighter behind the text |
-| `class="circle-it"`            | red hand-drawn circle around the phrase |
-| `class="hand"`                 | hand-lettered Caveat font |
-| `class="mono"`                 | JetBrains Mono font |
-| `class="joke"`                 | greyed-out "aside" paragraph (hidden when humor=dry) |
-| `class="joke-spicy"`           | extra-spicy aside (hidden when humor≠full) |
-| `class="swap"`                 | red marker color (use inside the hero title) |
+| Class                              | Effect |
+|------------------------------------|--------|
+| `class="marker-underline"`         | red squiggly marker line under a word |
+| `class="marker-underline blue"`    | same, in blue |
+| `class="marker-underline green"`   | same, in green |
+| `class="highlight"`                | yellow highlighter behind the text (always visible) |
+| `class="highlight-anim"`           | yellow highlighter that **sweeps in** when scrolled into view |
+| `class="highlight-anim blue"`      | same, blue |
+| `class="highlight-anim pink"`      | same, pink |
+| `class="highlight-anim green"`     | same, green |
+| `class="circle-it"`                | red hand-drawn circle around the phrase |
+| `class="hand"`                     | hand-lettered Caveat font |
+| `class="mono"`                     | JetBrains Mono font |
+| `class="joke"`                     | greyed-out "aside" paragraph (hidden when humor=dry) |
+| `class="joke-spicy"`               | extra-spicy aside (hidden when humor≠full) |
+| `class="swap"`                     | red marker color (use inside the hero title) |
+| `class="hd-btn"`                   | hand-drawn button with offset shadow on press (for inline call-to-action links) |
+| `class="hd-btn ghost"`             | button variant: transparent background |
+| `class="hd-btn red"`               | button variant: red border, alarm tone |
+
+**Note on `highlight-anim` vs `highlight`:** `highlight-anim` is the
+scroll-triggered sweep — use it on the *one* phrase per lesson you really
+want to land. `highlight` is the static, always-painted version — use it
+for routine emphasis. Don't put more than one `highlight-anim` per visible
+viewport; the effect dilutes when overused.
+
+**Example — putting an animated highlight inline:**
+
+```json
+"html": "<p>That's an agent. A chatbot talks. An agent <span class=\"highlight-anim\">decides what to do, then does it.</span> It picks tools…</p>"
+```
 
 Available inline tags: `<i>`, `<b>`, `<code>`, `<span>`, `<p>`, `<br/>`, `<pre>`.
 
@@ -639,11 +888,33 @@ into `src/topics/`.
 >
 > **Mechanics**
 > - Reflection `id` values must be globally unique: `"<topic>-l<n>-reflect"`.
+> - Checklist `id` values follow the same rule.
 > - Level `id` must be `basic` / `intermediate` / `advanced`.
 > - Use `tilt` values (`""`, `right`, `tilt2`, `tilt3`) to vary sticky-note
 >   rotation across the page. Don't tilt them all the same way.
 > - Include welcome stickies that lower the reader's defenses ("no equations,
 >   no synergy") and an `outro` with a `stamp` like `"VOL.<br/>0X<br/>DONE"`.
+>
+> **Visual variety (use sparingly — see §4.13)**
+> Across the *whole topic*, sprinkle in at most a handful of richer
+> components — never all in one lesson:
+> - Use `metaphor` with `polaroid: true` for 1–2 lessons where the image
+>   should feel like an actual photo. The placeholder text becomes the
+>   handwritten caption.
+> - Use `phone` for any lesson about chat / messaging / mobile UX.
+> - Use `terminal` for any lesson about CLI, cron, logs, build output.
+> - Use one `pullquote` per topic on the line you're proudest of. Pair it
+>   with `class="highlight-anim"` on a key phrase inside.
+> - Use one `dragmatch` somewhere in the middle of the topic if there are
+>   4+ named concepts that pair cleanly with definitions.
+> - Use one `checklist` (inside a `foldcard`) for the practical-application
+>   lesson — turn the advice into ticks the reader keeps.
+> - Use one `bigstamp` at the topic outro.
+> - Use `class="highlight-anim"` on ONE punchy phrase per lesson, no more.
+> - Add `kind: "animated-arrow"` inside one diagram per lesson (or one per
+>   topic) on the flow you most want the eye to follow.
+> - Add 1–2 `margindoodle` blocks per topic for hand-feel; they only render
+>   on wide screens, so treat them as bonus.
 >
 > **Final check before output**
 > Walk the JSON and ask:
